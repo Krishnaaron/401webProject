@@ -1,0 +1,50 @@
+.chart-actions {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.chart-actions i {
+	cursor: pointer;
+	/* Change cursor to pointer to indicate clickable icons */
+	font-size: 20px; 
+	color: #333; 
+}
+.chart-actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-bottom: 10px;
+}
+
+.chart-actions i {
+	font-size: 15px;
+	margin-left: 10px;
+	cursor: pointer;
+}
+
+.dataToggles {
+	margin-bottom: 20px;
+	display: none;
+	position: absolute;
+	background: #fff;
+	border: 1px solid #ccc;
+	padding: 10px;
+	margin-left: 250px;
+	z-index: 2;
+}
+
+.custom-export-icon {
+	font-size: 24px;
+	cursor: pointer;
+}
+
+.box {
+	width: 100px;
+}
+#jobCategories {
+	margin-top: 10px;
+}
+#company {
+	margin-top: 10px;
+}

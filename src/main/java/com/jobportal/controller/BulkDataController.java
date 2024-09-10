@@ -1,0 +1,101 @@
+package com.jobportal.controller;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.jobportal.model.Employers;
+import com.jobportal.model.Jobs;
+import com.jobportal.service.JobsService;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+
+@Controller
+public class BulkDataController {
+	private static final Logger LOGGER = LogManager.getLogger(BulkDataController.class);
+
+	@Autowired
+	private JobsService jobsService;
+
+	private String uploadedFolder;
+
+	@PostMapping("/blankTemplate")
+	protected void downloadSampleTemplate(HttpServletRequest request, HttpServletResponse response) throws IOException {
+		LOGGER.info("Job posting Templatecontroller {}");
+		sendFile(response, jobsService.createFile(), "jobPostBlankTemplate.xlsx");
+	}
+	@PostMapping("/existingData")
+	protected void downloadJobsData(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+		HttpSession session = request.getSession();
+		Employers employers = (Employers) session.getAttribute("employers");
+		int id = employers.getId();
+		LOGGER.info("Download Existing data Controller based on employer {}", employers.getId());
+		sendFile(response, jobsService.downloadJobs(id), "ExistingData.xlsx");
+	}
+
+	@PostMapping("/fileupload")
+	public String uploadFile(@RequestParam("file") MultipartFile file, @RequestParam("id") int id, HttpSession session,
+			RedirectAttributes redirectAttributes, HttpServletResponse response, Model model) {
+
+		try {
+			Path path = Paths.get(uploadedFolder + StringUtils.cleanPath(file.getOriginalFilename()));
+			Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+
+			if (path.toString() == null) {
+				LOGGER.error("File uploading path not found", path.toString());
+				response.sendError(HttpServletResponse.SC_NOT_FOUND, "File not found");
+				return "errorPage";
+			}
+
+			
+			session.setAttribute("filePath", path.toString());
+			session.setAttribute("id", id);
+			Jobs jobUpdateResponse = jobsService.updateJobs(path.toString(), id);
+			System.out.println(jobUpdateResponse.isStatus());
+			if (jobUpdateResponse.isStatus()) {
+			    redirectAttributes.addFlashAttribute("message", "File updated successfully!");
+			} else {
+			    redirectAttributes.addFlashAttribute("error", "File update failed.");
+			}
+
+			sendFile(response, jobUpdateResponse.getByteArrayInputStream(), "updatedData.xlsx");
+			return "redirect:/postjob";
+
+		} catch (IOException e) {
+			LOGGER.error("File uploading problem", e);
+			redirectAttributes.addFlashAttribute("error", "Failed to upload file.");
+			return "redirect:/postjob"; // Handle the exception by showing an error page
+		}
+	}
+
+	private void sendFile(HttpServletResponse response, ByteArrayInputStream fileStream, String filename)
+			throws IOException {
+		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		response.setHeader("Content-Disposition", "attachment; filename=" + filename);
+		response.setContentLength(fileStream.available());
+		LOGGER.info("File Convert byte Browser Automatic Download");
+		try (OutputStream out = response.getOutputStream()) {
+			byte[] buffer = new byte[1024];
+			int bytesRead;
+			while ((bytesRead = fileStream.read(buffer)) != -1) {
+				out.write(buffer, 0, bytesRead);
+			}
+		}
+	}
+}
