@@ -1,4 +1,5 @@
 package com.jobportal.controller;
+
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import com.jobportal.model.Admin;
+import com.jobportal.model.ChartValues;
 import com.jobportal.model.Employers;
 import com.jobportal.model.JobApplications;
 import com.jobportal.model.JobSeekers;
@@ -24,21 +26,22 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-public class AdminController
-{
+public class      AdminController {
 	@Autowired
-	AdminService				adminService;
+	AdminService adminService;
 
+	
+	
+	
 	/**
 	 * Displays the admin login page.
 	 * 
 	 * @return ModelAndView with view name for admin login.
 	 */
-	private static final Logger	LOGGER	= LogManager.getLogger(AdminController.class);
+	private static final Logger LOGGER = LogManager.getLogger(AdminController.class);
 
 	@RequestMapping("/adminlogincontroller")
-	public ModelAndView getAdminLogin()
-	{
+	public ModelAndView getAdminLogin() {
 		LOGGER.info("Entering getAdminLogin method");
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("Admin/AdminLogin");
@@ -49,33 +52,26 @@ public class AdminController
 	/**
 	 * Handles admin login request.
 	 * 
-	 * @param email
-	 *            Admin email.
-	 * @param password
-	 *            Admin password.
-	 * @param session
-	 *            HTTP session.
-	 * @param model
-	 *            Model for passing data to the view.
+	 * @param email    Admin email.
+	 * @param password Admin password.
+	 * @param session  HTTP session.
+	 * @param model    Model for passing data to the view.
 	 * @return Redirects to admin dashboard or login page with error message.
 	 */
 
 	@RequestMapping("/adminLogin")
-	public String getSeekerDashboard(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session, Model model)
-	{
+	public String getSeekerDashboard(@RequestParam("email") String email, @RequestParam("password") String password,
+			HttpSession session, Model model) {
 		LOGGER.info("Admin login attempt for email: {}", email);
 		Admin admin = adminService.adminLogin(email, password);
 
-		if (admin != null)
-		{
+		if (admin != null) {
 			LOGGER.info("Admin logged in successfully: {}", admin.getName());
 
 			session.setAttribute("admin", admin);
 			// Fetch and set other session attributes here
 			return "redirect:/cart";
-		}
-		else
-		{
+		} else {
 			LOGGER.warn("Invalid login attempt for email: {}", email);
 			model.addAttribute("errorMessage", "Invalid email or password");
 			return "Admin/AdminLogin";
@@ -85,55 +81,143 @@ public class AdminController
 	/**
 	 * Displays admin dashboard with job seeker, employer, and job counts.
 	 * 
-	 * @param model
-	 *            Model for passing data to the view.
+	 * @param model Model for passing data to the view.
 	 * @return View name for admin dashboard.
 	 */
+//	@RequestMapping("/cart")
+//	public String adminCart(Model model)
+//	{
+//		try
+//		{
+//			LOGGER.info("Accessing admin dashboard");
+//
+//			List<JobSeekers> jobSeekersList = adminService.viewJobSeeker();
+//			List<Employers> employer = adminService.viewEmployers();
+//			List<Jobs> jobsList = adminService.viewJobs();
+//			List<JobApplications> jobApplication = adminService.viewApplications();
+//		    Map<String, Map<String, Integer>> aggregatedData = jobsList.stream().filter(job -> job.getJob_category() != null)
+//		            .collect(Collectors.groupingBy(
+//		                Jobs::getJob_category,
+//		                Collectors.groupingBy(
+//		                    Jobs::getJob_Title,
+//		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
+//		                )
+//		            ));
+//		    
+////		    Map<String, Map<String, Integer>> aggregate = jobsList.stream()
+////		            .filter(job -> job.getJob_category() != null && job.getCompany_Name() != null)
+////		            .collect(Collectors.groupingBy(
+////		                Jobs::getJob_category,
+////		                Collectors.groupingBy(
+////		                    Jobs::getCompany_Name,
+////		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
+////		                )
+////		            ));
+//
+//		    
+//		    
+//		    
+//		    
+//		    Map<String, Map<String, Map<String, Integer>>> aggregate = jobsList.stream()
+//		    	    .filter(job -> job.getJob_category() != null && job.getCompany_Name() != null)
+//		    	    .collect(Collectors.groupingBy(
+//		    	        Jobs::getJob_category, // Group by category
+//		    	        Collectors.groupingBy(
+//		    	            Jobs::getCompany_Name, // Within each category, group by company
+//		    	            Collectors.toMap(
+//		    	                Jobs::getJob_Title, // Within each company, create a map of role to count
+//		    	                Jobs::getNumber_Of_Openings,
+//		    	                Integer::sum // Merging function to handle duplicate keys
+//		    	            )
+//		    	        )
+//		    	    ));
+//
+//		
+//		    JSONObject jo = new JSONObject(aggregate);
+//		    System.out.println(jo);
+//		  
+//		    Map<String, Map<String, Integer>>  aggregatedDataForCompanyName= jobsList.stream().filter(job -> job.getCompany_Name() != null)
+//		            .collect(Collectors.groupingBy(
+//		                Jobs::getCompany_Name,
+//		                Collectors.groupingBy(
+//		                    Jobs::getJob_Title,
+//		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
+//		                )
+//		            ));
+//		    JSONObject jobCompanyJson = new JSONObject(aggregate);
+//		    System.out.println(jobCompanyJson);
+//		    System.out.println(jobCompanyJson.toString());
+//		    JSONObject jobJson = new JSONObject(aggregatedData);
+//            int employe = employer.size();
+//			int jobSize = jobsList.size();
+//			int seekerSize = jobSeekersList.size();
+//			int jobApplicationSize = jobApplication.size();
+//		    model.addAttribute("jobJson",jobJson.toString());
+//		    model.addAttribute("jobCompanyJson",jobCompanyJson.toString());
+//		    model.addAttribute("jobSize", jobSize);
+//			model.addAttribute("employe", employe);
+//			model.addAttribute("seekerSize", seekerSize);
+//			model.addAttribute("jobApplicationSize", jobApplicationSize);
+//			LOGGER.info("Dashboard stats - Jobs: {}, Employers: {}, Seekers: {}, Applications: {}", jobSize, employe, seekerSize, jobApplicationSize);
+//			return "Admin/admin";
+//		}
+//		catch (Exception e)
+//		{
+//
+//			LOGGER.error("Error accessing admin dashboard", e);
+//			return "Admin/admin";
+//		}
+//	}
+
 	@RequestMapping("/cart")
-	public String adminCart(Model model)
-	{
-		try
-		{
+	public String adminCart(Model model) {
+		try {
 			LOGGER.info("Accessing admin dashboard");
 
 			List<JobSeekers> jobSeekersList = adminService.viewJobSeeker();
 			List<Employers> employer = adminService.viewEmployers();
 			List<Jobs> jobsList = adminService.viewJobs();
 			List<JobApplications> jobApplication = adminService.viewApplications();
-		    Map<String, Map<String, Integer>> aggregatedData = jobsList.stream().filter(job -> job.getJob_category() != null)
-		            .collect(Collectors.groupingBy(
-		                Jobs::getJob_category,
-		                Collectors.groupingBy(
-		                    Jobs::getJob_Title,
-		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
-		                )
-		            ));
-		    
-		    Map<String, Map<String, Integer>>  aggregatedDataForCompanyName= jobsList.stream().filter(job -> job.getCompany_Name() != null)
-		            .collect(Collectors.groupingBy(
-		                Jobs::getCompany_Name,
-		                Collectors.groupingBy(
-		                    Jobs::getJob_Title,
-		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
-		                )
-		            ));
-		    JSONObject jobCompanyJson = new JSONObject(aggregatedDataForCompanyName);
-		    JSONObject jobJson = new JSONObject(aggregatedData);
-            int employe = employer.size();
+			Map<String, Map<String, Integer>> aggregatedData = jobsList.stream()
+					.filter(job -> job.getJob_category() != null)
+					.collect(Collectors.groupingBy(Jobs::getJob_category, Collectors.groupingBy(Jobs::getJob_Title,
+							Collectors.summingInt(Jobs::getNumber_Of_Openings))));
+
+			Map<String, Map<String, Map<String, Integer>>> aggregate = jobsList.stream()
+					.filter(job -> job.getJob_category() != null && job.getCompany_Name() != null)
+					.collect(Collectors.groupingBy(Jobs::getJob_category, // Group by category
+							Collectors.groupingBy(Jobs::getCompany_Name, // Within each category, group by company
+									Collectors.toMap(Jobs::getJob_Title, // Within each company, create a map of role to
+																			// count
+											Jobs::getNumber_Of_Openings, Integer::sum // Merging function to handle
+																						// duplicate keys
+									))));
+
+			
+			
+			
+			
+			JSONObject jo = new JSONObject(aggregate);
+			System.out.println(jo);
+
+			JSONObject jobCompanyJson = new JSONObject(aggregate);
+			System.out.println(jobCompanyJson);
+			System.out.println(jobCompanyJson.toString());
+			JSONObject jobJson = new JSONObject(aggregatedData);
+			int employe = employer.size();
 			int jobSize = jobsList.size();
 			int seekerSize = jobSeekersList.size();
 			int jobApplicationSize = jobApplication.size();
-		    model.addAttribute("jobJson",jobJson.toString());
-		    model.addAttribute("jobCompanyJson",jobCompanyJson.toString());
-		    model.addAttribute("jobSize", jobSize);
+			model.addAttribute("jobJson", jobJson.toString());
+			model.addAttribute("jobCompanyJson", jobCompanyJson.toString());
+			model.addAttribute("jobSize", jobSize);
 			model.addAttribute("employe", employe);
 			model.addAttribute("seekerSize", seekerSize);
 			model.addAttribute("jobApplicationSize", jobApplicationSize);
-			LOGGER.info("Dashboard stats - Jobs: {}, Employers: {}, Seekers: {}, Applications: {}", jobSize, employe, seekerSize, jobApplicationSize);
+			LOGGER.info("Dashboard stats - Jobs: {}, Employers: {}, Seekers: {}, Applications: {}", jobSize, employe,
+					seekerSize, jobApplicationSize);
 			return "Admin/admin";
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 
 			LOGGER.error("Error accessing admin dashboard", e);
 			return "Admin/admin";
@@ -143,16 +227,14 @@ public class AdminController
 	/**
 	 * Retrieves and displays job seeker data.
 	 * 
-	 * @param model
-	 *            Model for passing data to the view.
+	 * @param model Model for passing data to the view.
 	 * @return View name for job seeker information.
 	 */
 
 	@RequestMapping("/AdminRetriveData")
-	public String getJobSeekerData(Model model)
-	{
+	public String getJobSeekerData(Model model) {
 		List<JobSeekers> SeekersList = adminService.viewJobSeeker();
-		List<JobSeekers> jobSeekersList = SeekersList.stream().filter(j -> j.getfName() != null) 
+		List<JobSeekers> jobSeekersList = SeekersList.stream().filter(j -> j.getfName() != null)
 				.sorted(Comparator.comparing(JobSeekers::getfName)).collect(Collectors.toList());
 		// ModelAndView mv = new ModelAndView();
 		model.addAttribute("jobSeekersList", jobSeekersList);
@@ -163,28 +245,21 @@ public class AdminController
 	/**
 	 * Updates job seeker status.
 	 * 
-	 * @param email
-	 *            Job seeker email.
-	 * @param status
-	 *            New status.
-	 * @param session
-	 *            HTTP session.
-	 * @param model
-	 *            Model for passing data to the view.
+	 * @param email   Job seeker email.
+	 * @param status  New status.
+	 * @param session HTTP session.
+	 * @param model   Model for passing data to the view.
 	 * @return Redirects to job seeker data retrieval.
 	 */
 	@RequestMapping("/JobSeekerEditController")
-	public String JobSeekerEditController(@RequestParam("email") String email, @RequestParam("status") String status, HttpSession session, Model model)
-	{
+	public String JobSeekerEditController(@RequestParam("email") String email, @RequestParam("status") String status,
+			HttpSession session, Model model) {
 		LOGGER.info("Job seeker status updated successfully for email: {}", email);
-		try
-		{
+		try {
 
 			adminService.updateStatus(email, status);
 			LOGGER.info("Job seeker status updated successfully for email: {}", email);
-		}
-		catch (Exception e)
-		{
+		} catch (Exception e) {
 			LOGGER.error("Failed to update job seeker status for email: {}", email, e);
 		}
 		return "redirect:/AdminRetriveData";
@@ -194,16 +269,15 @@ public class AdminController
 	/**
 	 * Retrieves and displays employer data.
 	 * 
-	 * @param model
-	 *            Model for passing data to the view.
+	 * @param model Model for passing data to the view.
 	 * @return View name for employer information.
 	 */
 	@RequestMapping("/AdminEmployerRetriveData")
-	public String getEmployerData(Model model)
-	{
+	public String getEmployerData(Model model) {
 
 		List<Employers> employers = adminService.viewEmployers();
-		List<Employers> employer = employers.stream().filter(emp -> emp.getUserName() != null).sorted(Comparator.comparing(Employers::getUserName)).collect(Collectors.toList());
+		List<Employers> employer = employers.stream().filter(emp -> emp.getUserName() != null)
+				.sorted(Comparator.comparing(Employers::getUserName)).collect(Collectors.toList());
 
 		model.addAttribute("employer", employer);
 		//// ModelAndView mv = new ModelAndView();
@@ -215,20 +289,16 @@ public class AdminController
 	/**
 	 * Updates employer status.
 	 * 
-	 * @param email
-	 *            Employer email.
-	 * @param status
-	 *            New status.
-	 * @param session
-	 *            HTTP session.
-	 * @param model
-	 *            Model for passing data to the view.
+	 * @param email   Employer email.
+	 * @param status  New status.
+	 * @param session HTTP session.
+	 * @param model   Model for passing data to the view.
 	 * @return Redirects to employer data retrieval.
 	 */
 
 	@RequestMapping("/AdminEmployerEdit")
-	public String JobEmployerditController(@RequestParam("email") String email, @RequestParam("status") String status, HttpSession session, Model model)
-	{
+	public String JobEmployerditController(@RequestParam("email") String email, @RequestParam("status") String status,
+			HttpSession session, Model model) {
 		LOGGER.info("Entering employer statud edit");
 		adminService.updateEmloyerStatus(email, status);
 
@@ -239,13 +309,11 @@ public class AdminController
 	/**
 	 * Retrieves and displays job data.
 	 * 
-	 * @param model
-	 *            Model for passing data to the view.
+	 * @param model Model for passing data to the view.
 	 * @return View name for job management information.
 	 */
 	@RequestMapping("/AdminJobRetriveData")
-	public String getJobData(Model model)
-	{
+	public String getJobData(Model model) {
 		long startTime = System.currentTimeMillis();
 		LOGGER.info("Fetching job data");
 
@@ -264,22 +332,16 @@ public class AdminController
 	/**
 	 * Updates job status.
 	 * 
-	 * @param job_Id
-	 *            Job ID.
-	 * @param employer_Id
-	 *            Employer ID.
-	 * @param job_Status
-	 *            New job status.
-	 * @param session
-	 *            HTTP session.
-	 * @param model
-	 *            Model for passing data to the view.
+	 * @param job_Id      Job ID.
+	 * @param employer_Id Employer ID.
+	 * @param job_Status  New job status.
+	 * @param session     HTTP session.
+	 * @param model       Model for passing data to the view.
 	 * @return Redirects to job data retrieval.
 	 */
 	@RequestMapping("/AdminJobEdit")
-	public String JobEditController(@RequestParam("job_id") int job_Id, @RequestParam("emp_id") int employer_Id, @RequestParam("job_Status") String job_Status, HttpSession session,
-			Model model)
-	{
+	public String JobEditController(@RequestParam("job_id") int job_Id, @RequestParam("emp_id") int employer_Id,
+			@RequestParam("job_Status") String job_Status, HttpSession session, Model model) {
 		LOGGER.info("Entering employer status edit");
 		adminService.updateJobStatus(job_Id, employer_Id, job_Status);
 
@@ -293,8 +355,7 @@ public class AdminController
 	 * @return ModelAndView with view name for admin profile.
 	 */
 	@RequestMapping("/AdminProfileView")
-	public ModelAndView adminProfileView()
-	{
+	public ModelAndView adminProfileView() {
 		LOGGER.info("Entering Admin profile view");
 
 		ModelAndView mv = new ModelAndView();
@@ -305,24 +366,17 @@ public class AdminController
 	/**
 	 * Edits admin profile.
 	 * 
-	 * @param name
-	 *            Admin name.
-	 * @param email
-	 *            Admin email.
-	 * @param admin_id
-	 *            Admin ID.
-	 * @param session
-	 *            HTTP session.
-	 * @param model
-	 *            Model for passing data to the view.
+	 * @param name     Admin name.
+	 * @param email    Admin email.
+	 * @param admin_id Admin ID.
+	 * @param session  HTTP session.
+	 * @param model    Model for passing data to the view.
 	 * @return Redirects to admin profile view.
 	 */
 	@RequestMapping("/AdminProfileEdite")
-	public String AdminProfileEdite(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("admin_id") int admin_id, HttpSession session,
-			Model model)
-	{
-		if (LOGGER.isDebugEnabled())
-		{
+	public String AdminProfileEdite(@RequestParam("name") String name, @RequestParam("email") String email,
+			@RequestParam("admin_id") int admin_id, HttpSession session, Model model) {
+		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Admin profile update request: name={}, email={}, admin_id={}", name, email, admin_id);
 		}
 
@@ -331,8 +385,7 @@ public class AdminController
 		// System.out.println(adminSeesion.getEmail());
 
 		boolean isCreated = adminService.updateAdminProfile(name, email, admin_id, adminSeesion.getEmail());
-		if (isCreated)
-		{
+		if (isCreated) {
 			LOGGER.info("Admin profile updated successfully for ID: {}", admin_id);
 			Admin admin = new Admin();
 			admin.setName(name);
@@ -343,8 +396,7 @@ public class AdminController
 			session.setAttribute("profileType", "success");
 		}
 
-		else
-		{
+		else {
 			LOGGER.warn("Failed to update admin profile. Email already exists: {}", email);
 			session.setAttribute("message", "Email ID already exists.");
 			session.setAttribute("messageType", "error");
@@ -358,33 +410,24 @@ public class AdminController
 	/**
 	 * Creates a new admin user.
 	 * 
-	 * @param name
-	 *            Admin name.
-	 * @param email
-	 *            Admin email.
-	 * @param password
-	 *            Admin password.
-	 * @param session
-	 *            HTTP session.
-	 * @param model
-	 *            Model for passing data to the view.
+	 * @param name     Admin name.
+	 * @param email    Admin email.
+	 * @param password Admin password.
+	 * @param session  HTTP session.
+	 * @param model    Model for passing data to the view.
 	 * @return Redirects to admin profile view.
 	 */
 	@RequestMapping("/AdminNewUserController")
-	public String AdminUserCreate(@RequestParam("name") String name, @RequestParam("email") String email, @RequestParam("password") String password, HttpSession session,
-			Model model)
-	{
+	public String AdminUserCreate(@RequestParam("name") String name, @RequestParam("email") String email,
+			@RequestParam("password") String password, HttpSession session, Model model) {
 		LOGGER.info("Entering AdminUserCreate method with name: {}, email: {}", name, email);
 		boolean isCreated = adminService.createNewAdminUser(name, email, password);
 
-		if (isCreated)
-		{
+		if (isCreated) {
 			LOGGER.info("Admin user create SuccessFully:{},", email);
 			session.setAttribute("message", "Admin user created successfully.");
 			session.setAttribute("messageType", "success");
-		}
-		else
-		{
+		} else {
 			LOGGER.warn("Faild to create admin user.Email Alredt exixt", email);
 			session.setAttribute("message", "Email ID already exists.");
 			session.setAttribute("messageType", "error");
@@ -394,8 +437,7 @@ public class AdminController
 	}
 
 	@RequestMapping("/adminPasswordController")
-	public ModelAndView getAdminPasswordPage()
-	{
+	public ModelAndView getAdminPasswordPage() {
 		System.out.println("welcome gopal");
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("Admin/ResetPassword");
@@ -403,8 +445,8 @@ public class AdminController
 	}
 
 	@RequestMapping("/AdminPasswordRestController")
-	public String AdminPasswordRest(HttpServletRequest request, HttpServletResponse responc, HttpSession session, Model model)
-	{
+	public String AdminPasswordRest(HttpServletRequest request, HttpServletResponse responc, HttpSession session,
+			Model model) {
 		LOGGER.info("Entering AdminPasswordRestController method");
 
 		String oldPassword = request.getParameter("oldPassword");
@@ -413,13 +455,10 @@ public class AdminController
 
 		boolean isCreated = adminService.updateAdminPassword(oldPassword, newPassword, admin_Id);
 
-		if (isCreated)
-		{
+		if (isCreated) {
 			session.setAttribute("message", "Admin user created successfully.");
 			session.setAttribute("messageType", "success");
-		}
-		else
-		{
+		} else {
 			session.setAttribute("message", "Email ID already exists.");
 			session.setAttribute("messageType", "error");
 			LOGGER.error("Exception in AdminPasswordRestController method: ");
@@ -430,20 +469,17 @@ public class AdminController
 	}
 
 	@RequestMapping("/ForgetPassword")
-	public String forgetPassword()
-	{
+	public String forgetPassword() {
 
 		return "Admin/ForgetPassword";
 
 	}
 
 	@PostMapping("/AdminPasswordForgetPassword")
-	public String passwordReset(@RequestParam("email") String email)
-	{
+	public String passwordReset(@RequestParam("email") String email) {
 		LOGGER.info("Entering admin password rest");
 		int n = adminService.resetPaaword(email);
-		if (n > 0)
-		{
+		if (n > 0) {
 			LOGGER.info("Admin password rest link send sucessfully");
 
 			SendEmail sendEmail = new SendEmail();
@@ -456,15 +492,13 @@ public class AdminController
 	}
 
 	@RequestMapping("/AdminLogOut")
-	public String AdminLogOut(HttpServletRequest request)
-	{
+	public String AdminLogOut(HttpServletRequest request) {
 
 		HttpSession session = request.getSession(false); // Get existing session
 															// without creating
 															// a new one
 		LOGGER.info("Entering admin logout controller");
-		if (session != null)
-		{
+		if (session != null) {
 			session.removeAttribute("admin"); // Remove specific attribute
 												// 'admin' from session
 			session.invalidate(); // Invalidate (remove) the entire session

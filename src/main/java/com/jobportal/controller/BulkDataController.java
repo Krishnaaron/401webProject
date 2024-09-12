@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -73,8 +74,8 @@ public class BulkDataController {
 			} else {
 			    redirectAttributes.addFlashAttribute("error", "File update failed.");
 			}
-
-			sendFile(response, jobUpdateResponse.getByteArrayInputStream(), "updatedData.xlsx");
+			session.setAttribute("jobUpdateResponse", jobUpdateResponse);
+			//sendFile(response, jobUpdateResponse.getByteArrayInputStream(), "updatedData.xlsx");
 			return "redirect:/postjob";
 
 		} catch (IOException e) {
@@ -83,7 +84,25 @@ public class BulkDataController {
 			return "redirect:/postjob"; // Handle the exception by showing an error page
 		}
 	}
+	@RequestMapping("/updateData")
+    public void updatedData(HttpServletRequest request, HttpServletResponse response,RedirectAttributes redirectAttributes) {
 
+		HttpSession session = request.getSession();
+		Jobs jobs = (Jobs) session.getAttribute("jobUpdateResponse");
+		if(jobs != null) {
+			try {
+				sendFile(response, jobs.getByteArrayInputStream(), "updatedData.xlsx");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			
+		}
+		else
+			redirectAttributes.addFlashAttribute("message", "pleace upload file view the result");
+		
+    
+    }
 	private void sendFile(HttpServletResponse response, ByteArrayInputStream fileStream, String filename)
 			throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");

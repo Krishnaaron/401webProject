@@ -90,6 +90,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let jobCategoriesJson = demoJobCategoriesJson;  
     console.log(jobCategoriesJson); 
     const categories = Object.keys(jobCategoriesJson);
+	
+	
     const jobCategoriesDropdown = document.getElementById('jobCategories');
     categories.forEach(category => {
         const option = document.createElement('option');
@@ -207,36 +209,61 @@ document.addEventListener('DOMContentLoaded', function() {
  initializeChart3D('line', false); // Default to line chart 
 });
 
-//chart3
-
+//chart3  Industries
 document.addEventListener('DOMContentLoaded', function() {
-    let companyCategoriesJson = companyJobCategoriesJson;  
-    console.log(companyCategoriesJson); 
-    const categories = Object.keys(companyCategoriesJson);
-    const industryCategoriesDropdown = document.getElementById('company');
-    
-    categories.forEach(category => {
+    // Define the sample JSON for job categories
+    let companyCategoriesJson = companyJobCategoriesJson;
+       
+
+    const categoryDropdown = document.getElementById('Categories');
+    const industryDropdown = document.getElementById('Industries');
+
+    Object.keys(companyCategoriesJson).forEach(category => {
         const option = document.createElement('option');
         option.value = category;
         option.textContent = category;
-        industryCategoriesDropdown.appendChild(option);
+        categoryDropdown.appendChild(option);
     });
 
-    function initializeCharts(type, is3D, selectedCategory = null) {
-        let chartData;
+    // Populate industry dropdown based on category selection
+    function populateIndustryDropdown(selectedCategory) {
+        industryDropdown.innerHTML = ''; // Clear previous options
+        if (selectedCategory && companyCategoriesJson[selectedCategory]) {
+            Object.keys(companyCategoriesJson[selectedCategory]).forEach(industry => {
+                const option = document.createElement('option');
+                option.value = industry;
+                option.textContent = industry;
+                industryDropdown.appendChild(option);
+            });
+        }
+    }
 
-        if (selectedCategory && selectedCategory !== "") {
-            const roles = Object.keys(companyCategoriesJson[selectedCategory]);
-            const openings = Object.values(companyCategoriesJson[selectedCategory]);
+    // When category is changed, update the industry dropdown
+    categoryDropdown.addEventListener('change', function() {
+        const selectedCategory = categoryDropdown.value;
+        populateIndustryDropdown(selectedCategory);
+    });
+
+    // Function to initialize charts
+    function initializeCharts(type, is3D, selectedCategory = null, selectedIndustry = null) {
+        let chartData = [];
+
+        if (selectedCategory && selectedIndustry) {
+            // Get data for the selected category and industry
+            const roles = Object.keys(companyCategoriesJson[selectedCategory][selectedIndustry]);
+            const openings = Object.values(companyCategoriesJson[selectedCategory][selectedIndustry]);
             chartData = roles.map((role, index) => [role, openings[index]]);
         } else {
-            chartData = categories.map(category => {
-                const totalOpenings = Object.values(companyCategoriesJson[category])
-                    .reduce((sum, openings) => sum + openings, 0);
-                return [category, totalOpenings];
+            // Aggregate data for all categories and industries
+            chartData = Object.entries(companyCategoriesJson).flatMap(([category, industries]) => {
+                return Object.entries(industries).map(([industry, roles]) => {
+                    const totalOpenings = Object.values(roles).reduce((sum, count) => sum + count, 0);
+                    return [`${industry} (${category})`, totalOpenings];
+                });
             });
         }
 
+        // Render the chart
         Highcharts.chart('m4', {
             chart: {
                 type: type,
@@ -251,10 +278,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 enabled: false
             },
             title: {
-                text: 'industry Category'
+                text: selectedCategory && selectedIndustry
+                    ? `Job Openings in ${selectedIndustry} (${selectedCategory})`
+                    : 'Job Openings Across All Industries'
             },
             xAxis: {
-                categories: type !== 'pie' ? (selectedCategory ? Object.keys(companyCategoriesJson[selectedCategory]) : categories) : undefined
+                categories: type !== 'pie' ? chartData.map(data => data[0]) : undefined
             },
             plotOptions: {
                 pie: {
@@ -270,56 +299,128 @@ document.addEventListener('DOMContentLoaded', function() {
                     dataLabels: {
                         enabled: true
                     }
-                },
-                line: {
-                    dataLabels: {
-                        enabled: true
-                    }
-                },
-                area: {
-                    dataLabels: {
-                        enabled: true
-                    }
                 }
             },
             series: [{
-                name: selectedCategory !== null ? selectedCategory : 'industry',
+                name: selectedCategory && selectedIndustry ? selectedIndustry : 'Industry',
                 data: chartData
             }],
-            exporting: {
-                enabled: true,
-                buttons: {
-                    contextButton: {
-                        menuItems: ['viewFullscreen', 'printChart', 'downloadPNG', 'downloadJPEG', 'downloadPDF', 'downloadSVG']
-                    }
-                }
-            }
-        });
+			navigation: {
+			                    buttonOptions: {
+			                        theme: {
+			                            style: {
+			                                fontSize: '10px',
+			                                color: '#888'
+			                                	 
+			                            },
+			                            states: {
+			                                hover: {
+			                                    style: {
+			                                        color: '#000'
+			                                    }
+			                                }
+			                            }
+			                        },
+			                        useHTML: true
+			                    }
+			                },
+
+			                exporting: {
+			                    buttons: {
+			                        contextButton: {
+			                            enabled: false
+			                        },
+			                        
+			                            tableButton : {
+			                            	text: '<i class="fa fa-table" aria-hidden="true"></i>',
+			                            
+			                            onclick: function() {
+			                              if (this.dataTableDiv && this.dataTableDiv.style.display !== 'none') {
+			                                this.dataTableDiv.style.display = 'none';
+			                              } else {
+			                                this.viewData();
+			                                this.dataTableDiv.style.display = '';
+			                              }
+			                            }
+			                          },
+			                        filterButton: {
+			                        	text :'<i class="fa fa-filter"></i>',
+			                        		 onclick: function () {
+			                                     const filterPanel = document.getElementById('dataToggleBoxss');
+												 
+			                                     filterPanel.style.display = filterPanel.style.display === 'none' ? 'block' : 'none';
+			                                 }
+			                        },
+			                        
+			                      
+			                        
+			                        exportButton: {
+			                            text: '<i class="fa fa-download"></i>',
+			                            // Use only the download related menu items from the default
+			                            // context button
+			                            menuItems: [
+			                                'downloadPNG',
+			                                'downloadJPEG',
+			                                'downloadPDF',
+			                                'downloadSVG'
+			                            ]
+			                        },
+			                        printButton: {
+			                            text: '<i class="fa fa-print"></i>',
+			                            onclick: function () {
+			                                this.print();
+			                            }
+			                        }
+			                        
+			                        
+			                    }
+			                }
+			
+			
+			
+		
+			                });
+		console.log('Chart object:', chart);
     }
 
-    document.getElementById('apply').addEventListener('click', function() {
-        const type = document.getElementById('chart').value;
-        const is3D = document.getElementById('threeD').checked;
-        const selectedCategory = document.getElementById('company').value;
-        
-        initializeCharts(type, is3D, selectedCategory);
-        const dataToggleBox = document.getElementById('dataToggle');
+    // Fetch button event listener to update chart
+    document.getElementById('fetch').addEventListener('click', function() {
+        const type = document.getElementById('cartType').value;
+        const is3D = document.getElementById('3Dview').checked;
+        const selectedCategory = document.getElementById('Categories').value;
+        const selectedIndustry = document.getElementById('Industries').value;
+
+        initializeCharts(type, is3D, selectedCategory, selectedIndustry);
+
+        // Hide the data toggle box after fetching
+        const dataToggleBox = document.getElementById('dataToggleBoxss');
         dataToggleBox.style.display = 'none';
     });
 
+    // Cancel button event listener to hide data box
+    document.getElementById('cancel').addEventListener('click', function() {
+        const dataToggleBox = document.getElementById('dataToggleBoxss');
+        dataToggleBox.style.display = 'none';
+    });
+/*
+    // Filter button event listener to toggle data box visibility
     document.getElementById('filter').addEventListener('click', function() {
-        const dataToggleBox = document.getElementById('dataToggle');
+        const dataToggleBox = document.getElementById('dataToggleBoxss');
         dataToggleBox.style.display = dataToggleBox.style.display === 'none' ? 'block' : 'none';
     });
-
-    document.getElementById('export').addEventListener('click', function() {
-        const chart = Highcharts.charts.find(chart => chart && chart.renderTo.id === 'm4');
-        if (chart) {
-            chart.exportChart();
-        } else {
-            console.error('Chart not found or no chart with id "m4"');
-        }
-    });
-
-    initializeCharts('pie', false); // Default to pie chart
+	
+	// Custom download button event listener
+	/*
+	document.getElementById('custom-download').addEventListener('click', function() {
+	              if (chart) {
+	                  console.log('Exporting chart'); // Debugging line
+	                  chart.exportChart(); // Ensure this is called on the correct chart instance
+	              } else {
+	                  console.log('Chart is not initialized or exportChart method is not available');
+	              }
+	          });
+			  
+			  */
+    // Initialize chart with aggregated data for all industries and categories
+    initializeCharts('pie', false);
 });

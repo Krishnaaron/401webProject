@@ -17,39 +17,42 @@
 <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
 	rel="stylesheet">
 <script src="https://code.highcharts.com/highcharts.js"></script>
-
 <link
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
 	rel="stylesheet">
+	<style>
+	 .CON {
+	width: 590px;
+}
+	
+	</style>
 <!-- high chart -->
- <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/funnel.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
-    <script src="https://code.highcharts.com/highcharts-more.js"></script>
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/funnel.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/10/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-3d.js"></script>
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
-    <script src="https://code.highcharts.com/modules/exporting.js"></script>
-    <script src="https://code.highcharts.com/modules/export-data.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 <!-- Custom CSS -->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/assets/css/admin.css">
-
-
-
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/assets/css/adminDash.css">
 </head>
-
 <%
 response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");//http 1.1
 response.setHeader("Pragma", "no-cache");//http1.0
 response.setHeader("Expires", "0");// Proxies
 
-if (session.getAttribute("admin") == null)
-{
+if (session.getAttribute("admin") == null) {
 
 	response.sendRedirect("index.jsp");
 
@@ -155,65 +158,74 @@ if (session.getAttribute("admin") == null)
 				</div>
 			</div>
 		</div>
-     </div>
+	</div>
+	<div class="row chart-container">
+		<div class="col-lg-5 col-md-12 chart">
+			<div class="chart-actions">
+				<i class="fas fa-filter" id="filterIcon"></i> <i
+					class="fas fa-download" id="exportIcon"></i>
+			</div>
+			<div id="dataToggleBox" class="dataToggles">
+				<label for="chartTypes">Choose chart type:</label> <select
+					id="chartTypes">
+					<option value="pie">Pie Chart</option>
+					<option value="bar">Bar Chart</option>
+					<option value="line">Line Chart</option>
+					<option value="area">Area Chart</option>
+				</select> <br>
 
+				<button id="applyFilter">Filter</button>
+			</div>
+			<div id="m1"></div>
+		</div>
+		<div class="col-lg-5 col-md-12 chart">
+			<div class="chart-actions">
+				<i class="fas fa-filter" id="filterIcons"></i> <i
+					class="fas fa-download" id="exportIcons"></i>
+			</div>
+			<div id="dataToggleBoxs" class="dataToggles">
+				<label for="chartType">Choose Chart Type:</label> <select
+					id="chartType" class="box">
+					<option value="pie">Pie Chart</option>
+					<option value="bar">Bar Chart</option>
+					<option value="line">Line Chart</option>
+					<option value="area">Area Chart</option>
+				</select> <br> <label for="jobCategories">Choose Categories :</label> <select
+					id="jobCategories" class="box">
+					<option value="">All Categories</option>
 
+				</select> <br> <input type="checkbox" id="threeDCheckBoxs"> <label
+					for="threeDCheckBoxs">3D</label> <br>
+				<button id="applyFilters">Filter</button>
+			</div>
+			<div id="m2"></div>
+		</div>
+	</div>
+	<div class="row chart-container CON">
+		<div class="col-lg-6 col-md-12 chart">
+			<div class="chart-actions">
+				<i class="fas fa-filter" id="filter"></i> <i class="fas fa-download"
+					id="export"></i>
+			</div>
+			<div id="dataToggle" class="dataToggles">
+				<label for="chart">Choose Chart Type : </label><select id="chart"
+					class="box">
+					<option value="pie">Pie Chart</option>
+					<option value="bar">Bar Chart</option>
+					<option value="line">Line Chart</option>
+					<option value="area">Area Chart</option>
+				</select> <br> <label for="company" class="me-2">Choose
+					Industries : </label><select id="company" class="box">
+					<option value="">Industries</option>
 
- <div class="row chart-container">
-        <div class="col-lg-5 col-md-12 chart">
-            <div class="chart-actions">
-                <i class="fas fa-filter" id="filterIcon"></i>
-                <i class="fas fa-download" id="exportIcon"></i> <!-- Export icon -->
-            </div>
-            <div id="dataToggleBox">
-                <label for="chartTypes">Choose chart type:</label>
-                <select id="chartTypes">
-                    <option value="pie">Pie Chart</option>
-                    <option value="bar">Bar Chart</option>
-                    <option value="line">Line Chart</option>
-                     <option value="area">Area Chart</option>
-                </select>
-                <br>
-                
-                <button id="applyFilter">Filter</button>
-            </div>
-            <div id="m1"></div>
-        </div>
-       <div class="col-lg-5 col-md-12 chart">
-        <div class="chart-actions">
-            <i class="fas fa-filter" id="filterIcons"></i>
-            <i class="fas fa-download" id="exportIcons"></i>
-        </div>
-        <div id="dataToggleBoxs">
-            <label for="chartType">Choose chart type:</label>
-            <select id="chartType">
-                <option value="pie">Pie Chart</option>
-                <option value="bar">Bar Chart</option>
-                <option value="line">Line Chart</option>
-                <option value="area">Area Chart</option>
-            </select>
-            <br>
-            <label for="Zoom">widget width:</label>
-            <select id="Zoom">
-                <option value="1x">1X</option>
-                <option value="2x">2x</option>
-               
-            </select>
-            <br>
-            <input type="checkbox" id="threeDCheckBoxs">
-            <label for="threeDCheckBoxs">3D</label>
-            <br>
-            <button id="applyFilters">Filter</button>
-        </div>
-        <div id="m2"></div>
-    </div>
-
-</div>
-
-
-
-
-	<div id="logoutModal" class="modal fade center" tabindex="-1"
+				</select> <br> <input type="checkbox" id="threeD"> <label
+					for="threeDCheckBoxs">3D</label> <br>
+				<button id="apply">Filter</button>
+			</div>
+			<div id="m4"></div>
+		</div>
+	</div>
+<div id="logoutModal" class="modal fade center" tabindex="-1"
 		aria-labelledby="logoutModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -236,31 +248,96 @@ if (session.getAttribute("admin") == null)
 			</div>
 		</div>
 	</div>
-
-      
-  
-   
-  
-<script>
-const employe =${employe} ; 
-const seekerSize = ${seekerSize}; 
-
-const staticData = {
-    numberOfEmployers: employe,
-    numberOfJobSeekers: seekerSize
-};
-const jobCategoriesJson =${jobCategories} ; 
-
-</script>
- 
-   
-    
-      
+	
+	<div id="dataToggleBoxs">
+        <table>
+            <tr>
+                <td>
+                    <div>
+                      <h5>  Report Filter </h5>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>
+                    <div>
+                        Cart Type
+                    </div>
+                </td>
+                <td>
+                    <select name="cartType" id="cartType" class="dropdo">
+                        <option value="Line">Line</option>
+                        <option value="Bar">Bar</option>
+                        <option value="Area">Area</option>
+                        <option value="Pie">Pie</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        Categories
+                    </div>
+                </td>
+                <td>
+                    <select name="Categories" id="Categories" class="dropdo">
+                        <option value="Allcategories">All Categories</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        Industries
+                    </div>
+                </td>
+                <td>
+                    <select name="Industries" id="Industries" class="dropdo">
+                        <option value="Industries">All Industries</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        3D View
+                    </div>
+                </td>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="3Dview">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="button-container">
+                        <button type="button" class="btn btn-light btn-sm">CANCEL</button>
+                        <button type="button" class="btn btn-primary btn-sm">FETCH</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+	
+	
+	
+	 
+	<script>
+		const employe = ${employe};
+	    const seekerSize = ${seekerSize}
+	    const staticData = {
+			numberOfEmployers : employe,
+			numberOfJobSeekers : seekerSize
+		};
+        const demoJobCategoriesJson = ${jobJson};
+		const companyJobCategoriesJson = ${jobCompanyJson};
+		
+	</script>
 	<script src="${pageContext.request.contextPath}/assets/js/admin.js"></script>
-<script src="${pageContext.request.contextPath}/assets/js/adminDash.js"></script>
-
-
-
+	<script src="${pageContext.request.contextPath}/assets/js/adminDash.js"></script>
 </body>
 
 </html>

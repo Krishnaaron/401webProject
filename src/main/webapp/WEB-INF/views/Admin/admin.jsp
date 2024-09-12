@@ -20,6 +20,12 @@
 <link
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
 	rel="stylesheet">
+	<style>
+	 .CON {
+	width: 590px;
+}
+	
+	</style>
 <!-- high chart -->
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/funnel.js"></script>
@@ -29,6 +35,12 @@
 <script src="https://code.highcharts.com/highcharts-more.js"></script>
 <script src="https://code.highcharts.com/10/highcharts.js"></script>
 <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+
 
 <script src="https://code.highcharts.com/highcharts.js"></script>
 <script src="https://code.highcharts.com/modules/exporting.js"></script>
@@ -176,6 +188,7 @@ if (session.getAttribute("admin") == null) {
 			<div class="chart-actions">
 				<i class="fas fa-filter" id="filterIcons"></i> <i
 					class="fas fa-download" id="exportIcons"></i>
+					
 			</div>
 			<div id="dataToggleBoxs" class="dataToggles">
 				<label for="chartType">Choose Chart Type:</label> <select
@@ -198,9 +211,94 @@ if (session.getAttribute("admin") == null) {
 	<div class="row chart-container CON">
 		<div class="col-lg-6 col-md-12 chart">
 			<div class="chart-actions">
-				<i class="fas fa-filter" id="filter"></i> <i class="fas fa-download"
+			<div id="filters"></div>
+			<!--	<i class="fas fa-filter" id="filters"></i>  <i class="fas fa-file-image"
 					id="export"></i>
+			<i class="fas fa-download" id="custom-download"></i>
+
+-->
 			</div>
+		
+			
+			<div id="dataToggleBoxss">
+        <table>
+            <tr>
+                <td>
+                    <div>
+                      <h5>  Report Filter </h5>
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <table>
+            <tr>
+                <td>
+                    <div>
+                        Cart Type
+                    </div>
+                </td>
+                <td>
+                    <select name="cartType" id="cartType" class="dropdo">
+                        <option value="line">Line</option>
+                        <option value="bar">Bar</option>
+                        <option value="area">Area</option>
+                        <option value="pie">Pie</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        Categories
+                    </div>
+                </td>
+                <td>
+                    <select name="Categories" id="Categories" class="dropdo">
+                        <option value="Allcategories">All Categories</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        Industries
+                    </div>
+                </td>
+                <td>
+                    <select name="Industries" id="Industries" class="dropdo">
+                       <option value="">Industries</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div>
+                        3D View
+                    </div>
+                </td>
+                <td>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="3Dview">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="button-container">
+                        <button type="button" class="btn btn-light btn-sm" id="cancel">CANCEL</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="fetch">FETCH</button>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+	
+	
+			
+			
+			
+			
+			
 			<div id="dataToggle" class="dataToggles">
 				<label for="chart">Choose Chart Type : </label><select id="chart"
 					class="box">
@@ -242,6 +340,10 @@ if (session.getAttribute("admin") == null) {
 			</div>
 		</div>
 	</div>
+	
+	
+	
+	 
 	<script>
 		const employe = ${employe};
 	    const seekerSize = ${seekerSize}

@@ -380,9 +380,7 @@ a {
             padding: 10px;
             margin-bottom: 20px;
             flex: 1;
-            .CON {
-	width: 593px;
-}
+           
         }
 
         .chart-container .chart h5 {

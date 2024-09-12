@@ -98,8 +98,9 @@
                 </div>
                 <input type="hidden" id="employer_id" name="id" value="${employers.id}">
             </form>
+           
         </div>
-
+       <div><h6> <a href="updateData">click to </a>   view the result</h6></div>
         <div class="form-section">
             <h6 class="mb-3">Download an Excel template to make bulk changes to the Job posted and also bulk New Job post:</h6>
             <form id="downloadForm" method="post">
@@ -111,8 +112,9 @@
                     <input type="radio" id="template" name="fileType" value="template" class="form-check-input">
                     <label for="template" class="form-check-label">Blank Template</label>
                 </div>
-              
+                 
                 <input type="hidden" id="employer_id" name="id" value="${employers.id}">
+                <br>
                 <button type="submit" class="btn btn-primary btn-xs mt-3">Download</button>
             </form>
         </div>

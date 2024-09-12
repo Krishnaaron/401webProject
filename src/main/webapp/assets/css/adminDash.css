@@ -1,8 +1,9 @@
 .chart-actions {
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	gap: 5px;
 	margin-bottom: 10px;
+	position: relative;
 }
 
 .chart-actions i {
@@ -48,3 +49,41 @@
 #company {
 	margin-top: 10px;
 }
+
+
+
+ #dataToggleBoxss {
+            z-index: 2;
+            background-color: rgb(255, 255, 255);
+            width: 350px;
+            margin-top :30px !important;
+           display:none; 
+           margin-left:180px!important;
+           position: absolute;
+            border-radius: 10px;
+            border-style: solid;
+            border-width: 1px;
+            border-color: rgb(211, 210, 210);
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            text-align: left;
+        }
+        td {
+            padding: 10px;
+        }
+        .dropdo {
+            width: 200px;
+            height: 30px;
+        }
+        .button-container {
+            margin-right: 20px;
+            
+            text-align: center; /* Center-aligns the content inside */
+            padding: 1px; /* Adds some padding around the button container */
+        }
+        .button-container button {
+            margin: 0 5px; /* Adds some space between the buttons */
+        }
