@@ -5,6 +5,7 @@
             font-family: Arial, sans-serif;
         }
         .container {
+           position:relative;
             max-width: 800px; /* Increased width of the container */
             background: #ffffff;
             border-radius: 10px;

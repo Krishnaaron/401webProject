@@ -71,10 +71,26 @@ public class DemoController {
 		 ChartValues chartdesign = new ChartValues();
 		 
 		 chartdesign.setChartType("column");
+		 chartdesign.setEnabled(false);
+		 chartdesign.setAlpha(10);
+		 chartdesign.setBeta(25);
+		 chartdesign.setDeppth(250);
+		 chartdesign.setEnabled(false);
 	//	 chartdesign.ti
 		 
 		 
-		
+		 JSONObject chart = new JSONObject();
+		 JSONObject chartValues = new JSONObject();
+		 chart.put("type", chartdesign.getChartType());
+		 JSONObject options3d = new JSONObject();
+		 options3d.put("enabled", false);
+		 options3d.put("alpha", 10);
+		 options3d.put("beta", 25);
+		 options3d.put("depth", 250);
+		 JSONObject credits = new JSONObject();
+		 credits.put("enabled", false);
+		 JSONObject title = new JSONObject();
+		 title.put("title", "Jobs Openiongs Across industries");
 		return null;
 	}
 	

@@ -1,11 +1,15 @@
 package com.jobportal.controller;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +34,8 @@ public class      AdminController {
 	@Autowired
 	AdminService adminService;
 
-	
+	@Autowired
+	ChartValues chartVal;
 	
 	//
 	/**
@@ -77,152 +82,222 @@ public class      AdminController {
 			return "Admin/AdminLogin";
 		}
 	}
+  
+	
+	
+	@RequestMapping("/charts")
+	public String chartDisplay(@RequestParam("Industries") String idustries,@RequestParam("cartType") String chartType,@RequestParam("Categories") String categories,@RequestParam("3Dview") boolean theeD,HttpSession session) {
+		chartVal.setChartType(chartType);
+		chartVal.setIs3d(theeD);
+		chartVal.setCategories(categories);
+		chartVal.setIdustries(idustries);
+		
+		
+		System.out.println("jsnkcsjskc" +" "+theeD);
+		  session.setAttribute("chartVal", chartVal);
+	return "redirect:/cart";
 
+	}
+	
 	/**
 	 * Displays admin dashboard with job seeker, employer, and job counts.
 	 * 
 	 * @param model Model for passing data to the view.
 	 * @return View name for admin dashboard.
 	 */
-//	@RequestMapping("/cart")
-//	public String adminCart(Model model)
-//	{
-//		try
-//		{
-//			LOGGER.info("Accessing admin dashboard");
-//
-//			List<JobSeekers> jobSeekersList = adminService.viewJobSeeker();
-//			List<Employers> employer = adminService.viewEmployers();
-//			List<Jobs> jobsList = adminService.viewJobs();
-//			List<JobApplications> jobApplication = adminService.viewApplications();
-//		    Map<String, Map<String, Integer>> aggregatedData = jobsList.stream().filter(job -> job.getJob_category() != null)
-//		            .collect(Collectors.groupingBy(
-//		                Jobs::getJob_category,
-//		                Collectors.groupingBy(
-//		                    Jobs::getJob_Title,
-//		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
-//		                )
-//		            ));
-//		    
-////		    Map<String, Map<String, Integer>> aggregate = jobsList.stream()
-////		            .filter(job -> job.getJob_category() != null && job.getCompany_Name() != null)
-////		            .collect(Collectors.groupingBy(
-////		                Jobs::getJob_category,
-////		                Collectors.groupingBy(
-////		                    Jobs::getCompany_Name,
-////		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
-////		                )
-////		            ));
-//
-//		    
-//		    
-//		    
-//		    
-//		    Map<String, Map<String, Map<String, Integer>>> aggregate = jobsList.stream()
-//		    	    .filter(job -> job.getJob_category() != null && job.getCompany_Name() != null)
-//		    	    .collect(Collectors.groupingBy(
-//		    	        Jobs::getJob_category, // Group by category
-//		    	        Collectors.groupingBy(
-//		    	            Jobs::getCompany_Name, // Within each category, group by company
-//		    	            Collectors.toMap(
-//		    	                Jobs::getJob_Title, // Within each company, create a map of role to count
-//		    	                Jobs::getNumber_Of_Openings,
-//		    	                Integer::sum // Merging function to handle duplicate keys
-//		    	            )
-//		    	        )
-//		    	    ));
-//
-//		
-//		    JSONObject jo = new JSONObject(aggregate);
-//		    System.out.println(jo);
-//		  
-//		    Map<String, Map<String, Integer>>  aggregatedDataForCompanyName= jobsList.stream().filter(job -> job.getCompany_Name() != null)
-//		            .collect(Collectors.groupingBy(
-//		                Jobs::getCompany_Name,
-//		                Collectors.groupingBy(
-//		                    Jobs::getJob_Title,
-//		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
-//		                )
-//		            ));
-//		    JSONObject jobCompanyJson = new JSONObject(aggregate);
-//		    System.out.println(jobCompanyJson);
-//		    System.out.println(jobCompanyJson.toString());
-//		    JSONObject jobJson = new JSONObject(aggregatedData);
-//            int employe = employer.size();
-//			int jobSize = jobsList.size();
-//			int seekerSize = jobSeekersList.size();
-//			int jobApplicationSize = jobApplication.size();
-//		    model.addAttribute("jobJson",jobJson.toString());
-//		    model.addAttribute("jobCompanyJson",jobCompanyJson.toString());
-//		    model.addAttribute("jobSize", jobSize);
-//			model.addAttribute("employe", employe);
-//			model.addAttribute("seekerSize", seekerSize);
-//			model.addAttribute("jobApplicationSize", jobApplicationSize);
-//			LOGGER.info("Dashboard stats - Jobs: {}, Employers: {}, Seekers: {}, Applications: {}", jobSize, employe, seekerSize, jobApplicationSize);
-//			return "Admin/admin";
-//		}
-//		catch (Exception e)
-//		{
-//
-//			LOGGER.error("Error accessing admin dashboard", e);
-//			return "Admin/admin";
-//		}
-//	}
-
+	@SuppressWarnings({ "unused", "unused" })
 	@RequestMapping("/cart")
-	public String adminCart(Model model) {
-		try {
+	public String adminCart(Model model ,HttpServletRequest request)
+	{
+		
+		
+		HttpSession session = request.getSession();
+		ChartValues chartVal = (ChartValues) session.getAttribute("chartVal");
+		
+		try
+		{
 			LOGGER.info("Accessing admin dashboard");
 
 			List<JobSeekers> jobSeekersList = adminService.viewJobSeeker();
 			List<Employers> employer = adminService.viewEmployers();
 			List<Jobs> jobsList = adminService.viewJobs();
 			List<JobApplications> jobApplication = adminService.viewApplications();
-			Map<String, Map<String, Integer>> aggregatedData = jobsList.stream()
-					.filter(job -> job.getJob_category() != null)
-					.collect(Collectors.groupingBy(Jobs::getJob_category, Collectors.groupingBy(Jobs::getJob_Title,
-							Collectors.summingInt(Jobs::getNumber_Of_Openings))));
+		    Map<String, Map<String, Integer>> aggregatedData = jobsList.stream().filter(job -> job.getJob_category() != null)
+		            .collect(Collectors.groupingBy(
+		                Jobs::getJob_category,
+		                Collectors.groupingBy(
+		                    Jobs::getJob_Title,
+		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
+		                )
+		            ));
+		    
+		    
+		    Set<String> categories = aggregatedData.keySet();
+		    
+		    
+//		    Map<String, Map<String, Integer>> aggregate = jobsList.stream()
+//		            .filter(job -> job.getJob_category() != null && job.getCompany_Name() != null)
+//		            .collect(Collectors.groupingBy(
+//		                Jobs::getJob_category,
+//		                Collectors.groupingBy(
+//		                    Jobs::getCompany_Name,
+//		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
+//		                )
+//		            ));
 
-			Map<String, Map<String, Map<String, Integer>>> aggregate = jobsList.stream()
-					.filter(job -> job.getJob_category() != null && job.getCompany_Name() != null)
-					.collect(Collectors.groupingBy(Jobs::getJob_category, // Group by category
-							Collectors.groupingBy(Jobs::getCompany_Name, // Within each category, group by company
-									Collectors.toMap(Jobs::getJob_Title, // Within each company, create a map of role to
-																			// count
-											Jobs::getNumber_Of_Openings, Integer::sum // Merging function to handle
-																						// duplicate keys
-									))));
+		    
+		    
+		    
+		    
+		    Map<String, Map<String, Map<String, Integer>>> aggregate = jobsList.stream()
+		    	    .filter(job -> job.getJob_category() != null && job.getCompany_Name() != null)
+		    	    .collect(Collectors.groupingBy(
+		    	        Jobs::getJob_category, // Group by category
+		    	        Collectors.groupingBy(
+		    	            Jobs::getCompany_Name, // Within each category, group by company
+		    	            Collectors.toMap(
+		    	                Jobs::getJob_Title, // Within each company, create a map of role to count
+		    	                Jobs::getNumber_Of_Openings,
+		    	                Integer::sum // Merging function to handle duplicate keys
+		    	            )
+		    	        )
+		    	    ));
 
-			
-			
-			
-			
-			JSONObject jo = new JSONObject(aggregate);
-			System.out.println(jo);
-
-			JSONObject jobCompanyJson = new JSONObject(aggregate);
-			System.out.println(jobCompanyJson);
-			System.out.println(jobCompanyJson.toString());
-			JSONObject jobJson = new JSONObject(aggregatedData);
-			int employe = employer.size();
+		    
+		    
+		    ChartValues chart = new ChartValues();
+		   chart.setChartType("line");
+		  chart.setAlpha(10);
+		  chart.setBeta(25);
+		  chart.setDepath(250);
+		  chart.setIs3d(false);
+		  chart.setCategories("false");
+		  chart.setTitle("Job Category");
+		  chart.setExportText("<i class=\"fa fa-download\"></i>");
+		 chart.setMenuItems(Arrays.asList("downloadPNG", "downloadJPEG", "downloadPDF", "downloadSVG"));
+		  
+		JSONObject chartJson = new JSONObject();
+		chartJson.put("type", chart.getChartType());
+		JSONObject options3D = new JSONObject();
+		options3D.put("enabled",chart.getIs3d());
+		options3D.put("alpha", chart.getAlpha());
+		options3D.put("beta",chart.getBeta());
+		options3D.put("depth", chart.getDepath());
+		
+		chartJson.put("options3d", options3D);
+		    
+		 JSONObject cretis = new JSONObject();
+		 cretis.put(" enabled", chart.getCategories());
+		 JSONObject title = new JSONObject();
+		 title.put("text",chart.getTitle());
+		 chartJson.put("title",title);
+		 
+		 
+		 
+		 
+		 JSONObject exportButton = new JSONObject();
+		 exportButton.put("text", chart.getExportText());
+		 exportButton.put("menuItems", chart.getMenuItems()); 
+		 
+		 
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		
+		  
+		    Map<String, Map<String, Integer>>  aggregatedDataForCompanyName= jobsList.stream().filter(job -> job.getCompany_Name() != null)
+		            .collect(Collectors.groupingBy(
+		                Jobs::getCompany_Name,
+		                Collectors.groupingBy(
+		                    Jobs::getJob_Title,
+		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
+		                )
+		            ));
+		    JSONObject jobCompanyJson = new JSONObject(aggregate);
+		    System.out.println(jobCompanyJson);
+		    System.out.println(jobCompanyJson.toString());
+		    JSONObject jobJson = new JSONObject(aggregatedData);
+            int employe = employer.size();
 			int jobSize = jobsList.size();
 			int seekerSize = jobSeekersList.size();
 			int jobApplicationSize = jobApplication.size();
-			model.addAttribute("jobJson", jobJson.toString());
-			model.addAttribute("jobCompanyJson", jobCompanyJson.toString());
-			model.addAttribute("jobSize", jobSize);
+		    model.addAttribute("jobJson",jobJson.toString());
+		    model.addAttribute("jobCompanyJson",jobCompanyJson.toString());
+		    model.addAttribute("jobSize", jobSize);
 			model.addAttribute("employe", employe);
 			model.addAttribute("seekerSize", seekerSize);
 			model.addAttribute("jobApplicationSize", jobApplicationSize);
-			LOGGER.info("Dashboard stats - Jobs: {}, Employers: {}, Seekers: {}, Applications: {}", jobSize, employe,
-					seekerSize, jobApplicationSize);
+			LOGGER.info("Dashboard stats - Jobs: {}, Employers: {}, Seekers: {}, Applications: {}", jobSize, employe, seekerSize, jobApplicationSize);
 			return "Admin/admin";
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 
 			LOGGER.error("Error accessing admin dashboard", e);
 			return "Admin/admin";
 		}
 	}
+
+//	@RequestMapping("/cart")
+//	public String adminCart(Model model) {
+//		try {
+//			LOGGER.info("Accessing admin dashboard");
+//
+//			List<JobSeekers> jobSeekersList = adminService.viewJobSeeker();
+//			List<Employers> employer = adminService.viewEmployers();
+//			List<Jobs> jobsList = adminService.viewJobs();
+//			List<JobApplications> jobApplication = adminService.viewApplications();
+//			Map<String, Map<String, Integer>> aggregatedData = jobsList.stream()
+//					.filter(job -> job.getJob_category() != null)
+//					.collect(Collectors.groupingBy(Jobs::getJob_category, Collectors.groupingBy(Jobs::getJob_Title,
+//							Collectors.summingInt(Jobs::getNumber_Of_Openings))));
+//
+//			Map<String, Map<String, Map<String, Integer>>> aggregate = jobsList.stream()
+//					.filter(job -> job.getJob_category() != null && job.getCompany_Name() != null)
+//					.collect(Collectors.groupingBy(Jobs::getJob_category, // Group by category
+//							Collectors.groupingBy(Jobs::getCompany_Name, // Within each category, group by company
+//									Collectors.toMap(Jobs::getJob_Title, // Within each company, create a map of role to
+//																			// count
+//											Jobs::getNumber_Of_Openings, Integer::sum // Merging function to handle
+//																						// duplicate keys
+//									))));
+//
+//			
+//			
+//			
+//			
+//			JSONObject jo = new JSONObject(aggregate);
+//			System.out.println(jo);
+//
+//			JSONObject jobCompanyJson = new JSONObject(aggregate);
+//			System.out.println(jobCompanyJson);
+//			System.out.println(jobCompanyJson.toString());
+//			JSONObject jobJson = new JSONObject(aggregatedData);
+//			int employe = employer.size();
+//			int jobSize = jobsList.size();
+//			int seekerSize = jobSeekersList.size();
+//			int jobApplicationSize = jobApplication.size();
+//			model.addAttribute("jobJson", jobJson.toString());
+//			model.addAttribute("jobCompanyJson", jobCompanyJson.toString());
+//			model.addAttribute("jobSize", jobSize);
+//			model.addAttribute("employe", employe);
+//			model.addAttribute("seekerSize", seekerSize);
+//			model.addAttribute("jobApplicationSize", jobApplicationSize);
+//			LOGGER.info("Dashboard stats - Jobs: {}, Employers: {}, Seekers: {}, Applications: {}", jobSize, employe,
+//					seekerSize, jobApplicationSize);
+//			return "Admin/admin";
+//		} catch (Exception e) {
+//
+//			LOGGER.error("Error accessing admin dashboard", e);
+//			return "Admin/admin";
+//		}
+//	}
 
 	/**
 	 * Retrieves and displays job seeker data.

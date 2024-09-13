@@ -55,6 +55,22 @@ public class DispatherServlet implements WebMvcConfigurer{
         return dataSource;
 	}
 	
+	
+
+//    @Bean
+//    public DataSource dataSource() {
+//        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+//        // Set the MySQL driver class name
+//        dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+//        // Set the URL for MySQL database connection
+//        dataSource.setUrl("jdbc:mysql://localhost:3306/jobportal?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true"); 
+//        // Set the username for MySQL database
+//        dataSource.setUsername("JOBPORTAL"); 
+//        // Set the password for MySQL database
+//        dataSource.setPassword("root"); 
+//        return dataSource;
+//    }
+	
 	 /**
      * Configures the SqlSessionFactory for MyBatis.
      * @param dataSource The DataSource to use for MyBatis.

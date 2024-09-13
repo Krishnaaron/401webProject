@@ -173,7 +173,7 @@ if (session.getAttribute("admin") == null) {
 			</div>
 			<div id="dataToggleBox" class="dataToggles">
 				<label for="chartTypes">Choose chart type:</label> <select
-					id="chartTypes" name="chartTypes">
+					id="chartTypes">
 					<option value="pie">Pie Chart</option>
 					<option value="bar">Bar Chart</option>
 					<option value="line">Line Chart</option>
@@ -221,12 +221,11 @@ if (session.getAttribute("admin") == null) {
 		
 			
 			<div id="dataToggleBoxss">
-    <form action="charts" method="get">
         <table>
             <tr>
                 <td>
                     <div>
-                      <h5>Report Filter</h5>
+                      <h5>  Report Filter </h5>
                     </div>
                 </td>
             </tr>
@@ -279,22 +278,20 @@ if (session.getAttribute("admin") == null) {
                 </td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="false" id="3Dview" name="3Dview">
+                        <input class="form-check-input" type="checkbox" value="" id="3Dview">
                     </div>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
                     <div class="button-container">
-                        <button type="reset" class="btn btn-light btn-sm" id="cancel">CANCEL</button>
-                        <button type="submit" class="btn btn-primary btn-sm" id="fetch">FETCH</button>
+                        <button type="button" class="btn btn-light btn-sm" id="cancel">CANCEL</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="fetch">FETCH</button>
                     </div>
                 </td>
             </tr>
         </table>
-    </form>
-</div>
-
+    </div>
 	
 	
 			
@@ -310,10 +307,10 @@ if (session.getAttribute("admin") == null) {
 					<option value="line">Line Chart</option>
 					<option value="area">Area Chart</option>
 				</select> <br> <label for="company" class="me-2">Choose
-					Industries : </label><select id="company"  name="company" class="box">
+					Industries : </label><select id="company" class="box">
 					<option value="">Industries</option>
 
-				</select> <br> <input type="checkbox" name="threeD" id="threeD"> <label
+				</select> <br> <input type="checkbox" id="threeD"> <label
 					for="threeDCheckBoxs">3D</label> <br>
 				<button id="apply">Filter</button>
 			</div>

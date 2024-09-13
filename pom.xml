@@ -8,6 +8,8 @@
   <name>SpringJobPortal Maven Webapp</name>
   <url>http://maven.apache.org</url>
   <dependencies>
+  
+  
   <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
 <dependency>
     <groupId>org.apache.logging.log4j</groupId>
@@ -24,6 +26,11 @@
     <groupId>org.json</groupId>
     <artifactId>json</artifactId>
     <version>20240303</version>
+</dependency>
+<dependency>
+    <groupId>mysql</groupId>
+    <artifactId>mysql-connector-java</artifactId>
+    <version>8.0.28</version> <!-- Use the latest stable version -->
 </dependency>
 
     <!-- Jackson Databind -->
@@ -66,7 +73,7 @@
       <version>3.0.0</version>
     </dependency>
   
-
+  
     <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
 	<dependency>
 		<groupId>org.projectlombok</groupId>

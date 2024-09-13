@@ -11,8 +11,25 @@ public class ChartVal
 	    private String yAxisTitle;
 	    private String xAxisTitle;
 	    private List<Integer> xCategory;
+        private String idustries;
+        private String categories;
+	    public String getIdustries() {
+			return idustries;
+		}
 
-	    // Constructor
+		public void setIdustries(String idustries) {
+			this.idustries = idustries;
+		}
+
+		public String getCategories() {
+			return categories;
+		}
+
+		public void setCategories(String categories) {
+			this.categories = categories;
+		}
+
+		// Constructor
 	    public ChartVal(String chartType, String title, String filterCondition, int filterValue, 
 	                       String yAxisTitle, String xAxisTitle, List<Integer> xCategory) {
 	        this.chartType = chartType;
@@ -84,4 +101,7 @@ public class ChartVal
 	    public void setxCategory(List<Integer> xCategory) {
 	        this.xCategory = xCategory;
 	    }
+	    
+	    
+	    
 }

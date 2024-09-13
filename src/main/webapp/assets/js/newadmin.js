@@ -1,3 +1,7 @@
+/**
+ * 
+ */
+
 
 
 //chart 1
@@ -141,7 +145,32 @@ document.addEventListener('DOMContentLoaded', function() {
             xAxis: {
                 categories: type !== 'pie' ? (selectedCategory ? Object.keys(jobCategoriesJson[selectedCategory]) : categories) : undefined
             },
-            
+            plotOptions: {
+                pie: {
+                    innerSize: 100,
+                    depth: 150,
+                    dataLabels: {
+                        enabled: true,
+                        format: '{point.name}: {point.y}'
+                    }
+                },
+                bar: {
+                    depth: 100,
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                },
+                area: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
             series: [{
                 name: 'Jobs',
                 data: chartData
@@ -340,7 +369,7 @@ document.addEventListener('DOMContentLoaded', function() {
 			
 		
 			                });
-		
+		console.log('Chart object:', chart);
     }
 
     // Fetch button event listener to update chart
