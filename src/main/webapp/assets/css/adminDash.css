@@ -50,13 +50,18 @@
 	margin-top: 10px;
 }
 
-
+#title{
+	width: 200px;
+	margin-right:60px;
+	
+	
+}
 
  #dataToggleBoxss {
             z-index: 2;
             background-color: rgb(255, 255, 255);
             width: 350px;
-            margin-top :30px !important;
+            margin-top :3px !important;
            display:none; 
            margin-left:180px!important;
            position: absolute;

@@ -553,4 +553,10 @@ public class JobsServiceImp implements JobsService {
 		return new ByteArrayInputStream(bs.toByteArray());
 	}
 
+	@Override
+	public List<Jobs> viewEmployerJobs(int employerId) {
+		// TODO Auto-generated method stub
+		return jobsMapper.downloadJobs(employerId);
+	}
+
 }

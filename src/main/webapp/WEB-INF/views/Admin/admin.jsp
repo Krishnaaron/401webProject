@@ -13,7 +13,7 @@
 	rel="stylesheet"
 	integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
 	crossorigin="anonymous">
-
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css"
 	rel="stylesheet">
 <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -186,6 +186,7 @@ if (session.getAttribute("admin") == null) {
 		</div>
 		<div class="col-lg-5 col-md-12 chart">
 			<div class="chart-actions">
+			
 				<i class="fas fa-filter" id="filterIcons"></i> <i
 					class="fas fa-download" id="exportIcons"></i>
 					
@@ -210,34 +211,25 @@ if (session.getAttribute("admin") == null) {
 	</div>
 	<div class="row chart-container CON">
 		<div class="col-lg-6 col-md-12 chart">
+		
 			<div class="chart-actions">
-			<div id="filters"></div>
-			<!--	<i class="fas fa-filter" id="filters"></i>  <i class="fas fa-file-image"
-					id="export"></i>
+			<div id="title"> <h4>job opennings </h4></div>
+			<i class="fas fa-filter" id="filters"></i>
 			<i class="fas fa-download" id="custom-download"></i>
 
--->
 			</div>
 		
 			
 			<div id="dataToggleBoxss">
-    <form action="charts" method="get">
+    <form id="filterForm"> 
         <table>
             <tr>
-                <td>
-                    <div>
-                      <h5>Report Filter</h5>
-                    </div>
-                </td>
+                <td><div><h5>Report Filter</h5></div></td>
             </tr>
         </table>
         <table>
             <tr>
-                <td>
-                    <div>
-                        Cart Type
-                    </div>
-                </td>
+                <td><div>Cart Type</div></td>
                 <td>
                     <select name="cartType" id="cartType" class="dropdo">
                         <option value="line">Line</option>
@@ -248,11 +240,7 @@ if (session.getAttribute("admin") == null) {
                 </td>
             </tr>
             <tr>
-                <td>
-                    <div>
-                        Categories
-                    </div>
-                </td>
+                <td><div>Categories</div></td>
                 <td>
                     <select name="Categories" id="Categories" class="dropdo">
                         <option value="Allcategories">All Categories</option>
@@ -260,40 +248,33 @@ if (session.getAttribute("admin") == null) {
                 </td>
             </tr>
             <tr>
-                <td>
-                    <div>
-                        Industries
-                    </div>
-                </td>
+                <td><div>Industries</div></td>
                 <td>
                     <select name="Industries" id="Industries" class="dropdo">
-                       <option value="">Industries</option>
+                        <option value="">Industries</option>
                     </select>
                 </td>
             </tr>
             <tr>
-                <td>
-                    <div>
-                        3D View
-                    </div>
-                </td>
+                <td><div>3D View</div></td>
                 <td>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="false" id="3Dview" name="3Dview">
+                        <input class="form-check-input" type="checkbox" value="true" id="3Dview" name="3Dview">
                     </div>
                 </td>
             </tr>
             <tr>
                 <td colspan="2">
                     <div class="button-container">
-                        <button type="reset" class="btn btn-light btn-sm" id="cancel">CANCEL</button>
-                        <button type="submit" class="btn btn-primary btn-sm" id="fetch">FETCH</button>
+                        <button type="button" class="btn btn-light btn-sm" id="cancel">CANCEL</button>
+                        <button type="button" class="btn btn-primary btn-sm" id="fetch">FETCH</button>
                     </div>
                 </td>
             </tr>
         </table>
-    </form>
+    </form>  
 </div>
+
 
 	
 	
@@ -303,6 +284,7 @@ if (session.getAttribute("admin") == null) {
 			
 			
 			<div id="dataToggle" class="dataToggles">
+			
 				<label for="chart">Choose Chart Type : </label><select id="chart"
 					class="box">
 					<option value="pie">Pie Chart</option>

@@ -11,6 +11,8 @@
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.bootstrap5.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jobpost.css">
     </head>
@@ -138,6 +140,27 @@
         </div>
     </div>
 
+<div class="p-5">
+        <table id="example" class="table table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Role</th>
+                    <th>Location</th>
+                    <th>Skill</th>
+                    <th>Job Type</th>
+                    <th>Company Name</th>
+                    <th>Experience Leval</th>
+                    <th>Number of Oppenings</th>
+                    <th>Job Status</th>
+                    <th>Job Categories</th>
+                    
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be dynamically loaded here -->
+            </tbody>
+        </table>
+</div>
     <!-- JS Scripts -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -145,7 +168,35 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="${pageContext.request.contextPath}/assets/js/admin.js"></script>
     <script src="${pageContext.request.contextPath}/assets/js/jobpost.js"></script>
+ <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.1.6/js/dataTables.bootstrap5.js"></script>
  
+ <script>
+ $(document).ready(function () {
+	    $('#example').DataTable({
+	        "processing": true,
+	        "serverSide": true,
+	        "ajax": {
+	            "url": "jobss", // Adjust this URL based on your actual endpoint
+	            "type": "GET",
+	            "dataSrc": "" // If your server response contains the data at the root level
+	        },
+	        "columns": [ // Fixed the syntax error here
+	            { "data": "job_Title" },
+	            { "data": "location" },
+	            { "data": "required_Skills" },
+	            { "data": "job_Type" },
+	            { "data": "company_Name" },
+	            { "data": "experience_Level" },
+	            { "data": "number_Of_Openings" },
+	            { "data": "job_Status" },
+	            { "data": "job_Category" }
+	        ]
+	    });
+	});
 
+    </script>
 </body>
 </html>

@@ -3,6 +3,7 @@ package com.jobportal.controller;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -12,19 +13,26 @@ import org.apache.logging.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import com.jobportal.model.Admin;
+import com.jobportal.model.Chart;
+import com.jobportal.model.ChartData;
 import com.jobportal.model.ChartValues;
 import com.jobportal.model.Employers;
 import com.jobportal.model.JobApplications;
 import com.jobportal.model.JobSeekers;
 import com.jobportal.model.Jobs;
 import com.jobportal.service.AdminService;
+import com.jobportal.service.ChartService;
+import com.jobportal.service.ChartServices;
+
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -37,6 +45,9 @@ public class      AdminController {
 	@Autowired
 	ChartValues chartVal;
 	
+	
+	@Autowired
+	ChartServices chartServices;
 	//
 	/**
 	 * Displays the admin login page.
@@ -85,27 +96,41 @@ public class      AdminController {
   
 	
 	
-	@RequestMapping("/charts")
-	public String chartDisplay(@RequestParam("Industries") String idustries,@RequestParam("cartType") String chartType,@RequestParam("Categories") String categories,@RequestParam("3Dview") boolean theeD,HttpSession session) {
-		chartVal.setChartType(chartType);
-		chartVal.setIs3d(theeD);
-		chartVal.setCategories(categories);
-		chartVal.setIdustries(idustries);
-		
-		
-		System.out.println("jsnkcsjskc" +" "+theeD);
-		  session.setAttribute("chartVal", chartVal);
-	return "redirect:/cart";
+	 @RequestMapping("/chart")
+	    public String chartDisplay(
+	        @RequestParam(value = "Industries", required = false, defaultValue = "") String industries,
+	        @RequestParam(value = "chartType", required = false, defaultValue = "line") String chartType,
+	        @RequestParam(value = "Categories", required = false, defaultValue = "Allcategories") String categories,
+	        @RequestParam(value = "3Dview", defaultValue = "false") String threeDViewStr,
+	        HttpSession session) {
 
-	}
-	
+	        boolean is3D = Boolean.parseBoolean(threeDViewStr);  // Convert string to boolean
+
+	        // Create or retrieve your ChartValues object
+	        ChartValues chartVal = (ChartValues) session.getAttribute("chartVal");
+	        if (chartVal == null) {
+	            chartVal = new ChartValues(); // Initialize if not present in session
+	        }
+
+	        chartVal.setChartType(chartType);
+	        chartVal.setIs3d(is3D);
+	        chartVal.setCategories(categories);
+	        chartVal.setIdustries(industries);
+
+	        System.out.println("3D view value: " + is3D);  // Debugging log
+
+	        session.setAttribute("chartVal", chartVal);
+
+	        return "redirect:/cart";
+	    }
+
 	/**
 	 * Displays admin dashboard with job seeker, employer, and job counts.
 	 * 
 	 * @param model Model for passing data to the view.
 	 * @return View name for admin dashboard.
 	 */
-	@SuppressWarnings({ "unused", "unused" })
+	
 	@RequestMapping("/cart")
 	public String adminCart(Model model ,HttpServletRequest request)
 	{
@@ -144,8 +169,20 @@ public class      AdminController {
 //		                    Collectors.summingInt(Jobs::getNumber_Of_Openings)
 //		                )
 //		            ));
-
 		    
+		    
+		    
+
+		    ChartData chartData = new ChartData();
+	    	Chart chart = chartServices.retriveChart();
+	    	
+	    	chartData.setType(chart.getChartType());
+	    	chartData.setIs3D(chart.getIs3D());
+	    	chartData.setAlpha(10);
+	    	chartData.setBeta(25);
+	    	chartData.setDepth(250);
+	    	chartData.setEnabled("false");
+	    	chartData.setTitle("Job Openings");
 		    
 		    
 		    
@@ -163,42 +200,42 @@ public class      AdminController {
 		    	        )
 		    	    ));
 
+		    chartData.setJobOpenings(aggregate);
 		    
-		    
-		    ChartValues chart = new ChartValues();
-		   chart.setChartType("line");
-		  chart.setAlpha(10);
-		  chart.setBeta(25);
-		  chart.setDepath(250);
-		  chart.setIs3d(false);
-		  chart.setCategories("false");
-		  chart.setTitle("Job Category");
-		  chart.setExportText("<i class=\"fa fa-download\"></i>");
-		 chart.setMenuItems(Arrays.asList("downloadPNG", "downloadJPEG", "downloadPDF", "downloadSVG"));
-		  
-		JSONObject chartJson = new JSONObject();
-		chartJson.put("type", chart.getChartType());
-		JSONObject options3D = new JSONObject();
-		options3D.put("enabled",chart.getIs3d());
-		options3D.put("alpha", chart.getAlpha());
-		options3D.put("beta",chart.getBeta());
-		options3D.put("depth", chart.getDepath());
-		
-		chartJson.put("options3d", options3D);
-		    
-		 JSONObject cretis = new JSONObject();
-		 cretis.put(" enabled", chart.getCategories());
-		 JSONObject title = new JSONObject();
-		 title.put("text",chart.getTitle());
-		 chartJson.put("title",title);
-		 
-		 
-		 
-		 
-		 JSONObject exportButton = new JSONObject();
-		 exportButton.put("text", chart.getExportText());
-		 exportButton.put("menuItems", chart.getMenuItems()); 
-		 
+//		    ChartValues chart = new ChartValues();
+//		   chart.setChartType("line");
+//		  chart.setAlpha(10);
+//		  chart.setBeta(25);
+//		  chart.setDepath(250);
+//		  chart.setIs3d(false);
+//		  chart.setCategories("false");
+//		  chart.setTitle("Job Category");
+//		  chart.setExportText("<i class=\"fa fa-download\"></i>");
+//		 chart.setMenuItems(Arrays.asList("downloadPNG", "downloadJPEG", "downloadPDF", "downloadSVG"));
+//		  
+//		JSONObject chartJson = new JSONObject();
+//		chartJson.put("type", chart.getChartType());
+//		JSONObject options3D = new JSONObject();
+//		options3D.put("enabled",chart.getIs3d());
+//		options3D.put("alpha", chart.getAlpha());
+//		options3D.put("beta",chart.getBeta());
+//		options3D.put("depth", chart.getDepath());
+//		
+//		chartJson.put("options3d", options3D);
+//		    
+//		 JSONObject cretis = new JSONObject();
+//		 cretis.put(" enabled", chart.getCategories());
+//		 JSONObject title = new JSONObject();
+//		 title.put("text",chart.getTitle());
+//		 chartJson.put("title",title);
+//		 
+//		 
+//		 
+//		 
+//		 JSONObject exportButton = new JSONObject();
+//		 exportButton.put("text", chart.getExportText());
+//		 exportButton.put("menuItems", chart.getMenuItems()); 
+//		 
 		 
 		    
 		    

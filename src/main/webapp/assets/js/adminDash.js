@@ -219,8 +219,11 @@ document.addEventListener('DOMContentLoaded', function() {
         populateIndustryDropdown(selectedCategory);
     });
 
+
+
+
     // Function to initialize charts
-    function initializeCharts(type, is3D, selectedCategory = null, selectedIndustry = null) {
+   function initializeCharts(type, is3D, selectedCategory, selectedIndustry, companyCategoriesJson, title, alpha, beta, depth, enabled) {
         let chartData = [];
 
         if (selectedCategory && selectedIndustry) {
@@ -244,18 +247,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 type: type,
                 options3d: {
                     enabled: is3D,
-                    alpha: 10,
-                    beta: 25,
-                    depth: 250
+                    alpha: alpha,
+                    beta: beta,
+                    depth: depth
                 }
             },
             credits: {
+				
                 enabled: false
-            },
+              
+            }, exporting: {
+        buttons: {
+            contextButton: {
+                enabled: false
+            }
+        }
+    },
             title: {
-                text: selectedCategory && selectedIndustry
-                    ? `Job Openings in ${selectedIndustry} (${selectedCategory})`
-                    : 'Job Openings Across All Industries'
+                text: ''
             },
             xAxis: {
                 categories: type !== 'pie' ? chartData.map(data => data[0]) : undefined
@@ -265,122 +274,81 @@ document.addEventListener('DOMContentLoaded', function() {
                 name: selectedCategory && selectedIndustry ? selectedIndustry : 'Industry',
                 data: chartData
             }],
-			navigation: {
-			                    buttonOptions: {
-			                        theme: {
-			                            style: {
-			                                fontSize: '13px',
-			                                color: '#000'
-			                                	 
-			                            },
-			                            states: {
-			                                hover: {
-			                                    style: {
-			                                        color: '#000'
-			                                    }
-			                                }
-			                            }
-			                        },
-			                        useHTML: true
-			                    }
-			                },
-
-			                exporting: {
-			                    buttons: {
-			                        contextButton: {
-			                            enabled: false
-			                        },
-			                        
-			                            tableButton : {
-			                            	text: '<i class="fa fa-table" aria-hidden="true"></i>',
-			                            
-			                            onclick: function() {
-			                              if (this.dataTableDiv && this.dataTableDiv.style.display !== 'none') {
-			                                this.dataTableDiv.style.display = 'none';
-			                              } else {
-			                                this.viewData();
-			                                this.dataTableDiv.style.display = '';
-			                              }
-			                            }
-			                          },
-			                        filterButton: {
-			                        	text :'<i class="fa fa-filter"></i>',
-			                        		 onclick: function () {
-			                                     const filterPanel = document.getElementById('dataToggleBoxss');
-												 
-			                                     filterPanel.style.display = filterPanel.style.display === 'none' ? 'block' : 'none';
-			                                 }
-			                        },
-			                        
-			                      
-			                        
-			                        exportButton: {
-			                            text: '<i class="fa fa-download"></i>',
-			                            // Use only the download related menu items from the default
-			                            // context button
-			                            menuItems: [
-			                                'downloadPNG',
-			                                'downloadJPEG',
-			                                'downloadPDF',
-			                                'downloadSVG'
-			                            ]
-			                        },
-			                        printButton: {
-			                            text: '<i class="fa fa-print"></i>',
-			                            onclick: function () {
-			                                this.print();
-			                            }
-			                        }
-			                        
-			                        
-			                    }
-			                }
-			
-			
-			
 		
-			                });
+		 });
 		
     }
 
-    // Fetch button event listener to update chart
-    document.getElementById('fetch').addEventListener('click', function() {
-        const type = document.getElementById('cartType').value;
-        const is3D = document.getElementById('3Dview').checked;
-        const selectedCategory = document.getElementById('Categories').value;
-        const selectedIndustry = document.getElementById('Industries').value;
-
-        initializeCharts(type, is3D, selectedCategory, selectedIndustry);
-
-        // Hide the data toggle box after fetching
-        const dataToggleBox = document.getElementById('dataToggleBoxss');
-        dataToggleBox.style.display = 'none';
-    });
-
-    // Cancel button event listener to hide data box
-    document.getElementById('cancel').addEventListener('click', function() {
-        const dataToggleBox = document.getElementById('dataToggleBoxss');
-        dataToggleBox.style.display = 'none';
-    });
-/*
-    // Filter button event listener to toggle data box visibility
-    document.getElementById('filter').addEventListener('click', function() {
-        const dataToggleBox = document.getElementById('dataToggleBoxss');
-        dataToggleBox.style.display = dataToggleBox.style.display === 'none' ? 'block' : 'none';
-    });
+ 
 	
+	document.getElementById('fetch').addEventListener('click', function() {
+    const type = document.getElementById('cartType').value;
+    const is3D = document.getElementById('3Dview').checked;
+    const selectedCategory = document.getElementById('Categories').value;
+    const selectedIndustry = document.getElementById('Industries').value;
+
+    $.ajax({
+        url: "chartData", // Ensure this matches the @PostMapping URL
+        type: "POST",
+        contentType: "application/json", // Ensure JSON content type
+        data: JSON.stringify({
+            chartType: type,
+            industries: selectedIndustry,
+            categories: selectedCategory,
+            is3D: is3D
+        }),
+        success: function(chartData) {
+          
+            const type = chartData.type;
+            const is3D = chartData.is3D;
+            const alpha = chartData.alpha;
+            const beta = chartData.beta;
+            const depth = chartData.depth;
+            const enabled = chartData.enabled;
+              alert(enabled);
+            const title = chartData.title;
+            const dataToggleBox = document.getElementById('dataToggleBoxss');
+           initializeCharts(type, is3D, selectedCategory, selectedIndustry, companyCategoriesJson, title, alpha, beta, depth, enabled);
+              dataToggleBox.style.display = 'none';
+        },
+        error: function(xhr, status, error) {
+            console.error("Error fetching chart data:", status, error);
+            const dataToggleBox = document.getElementById('dataToggleBoxss');
+            dataToggleBox.style.display = 'none';
+            
+        }
+    });
+});
+
+
+// Cancel button event listener to hide data box
+document.getElementById('cancel').addEventListener('click', function() {
+    const dataToggleBox = document.getElementById('dataToggleBoxss');
+    dataToggleBox.style.display = 'none';
+});
+
+// Toggle data box visibility
+document.getElementById('filters').addEventListener('click', function() {
+    const dataToggleBox = document.getElementById('dataToggleBoxss');
+    dataToggleBox.style.display = dataToggleBox.style.display === 'none' ? 'block' : 'none';
+});
+
+
+
+   
 	// Custom download button event listener
-	/*
-	document.getElementById('custom-download').addEventListener('click', function() {
-	              if (chart) {
-	                  console.log('Exporting chart'); // Debugging line
-	                  chart.exportChart(); // Ensure this is called on the correct chart instance
-	              } else {
-	                  console.log('Chart is not initialized or exportChart method is not available');
-	              }
-	          });
-			  
-			  */
+	 document.getElementById('custom-download').addEventListener('click', function() {
+   const chart = Highcharts.charts.find(chart => chart && chart.renderTo.id === 'm4');
+    if (chart) {
+        chart.exportChart();
+    } else {
+        console.error('Chart not found or no chart with id "m2"');
+    }
+});
+
+	
+
+			 initializeCharts('column', false, null, null, companyCategoriesJson, 'Job Openings Overview', 0, 0, 0, 'false');
     // Initialize chart with aggregated data for all industries and categories
-    initializeCharts('pie', false);
+   
 });

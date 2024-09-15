@@ -16,6 +16,8 @@ public interface JobsService
 
 	public ByteArrayInputStream downloadJobs(int employerId);
 
+	
+	public List<Jobs> viewEmployerJobs(int employerId);
 	public Jobs updateJobs(String filePath, int id);
 
 	public ByteArrayInputStream createFile();
