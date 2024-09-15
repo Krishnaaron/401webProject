@@ -13,7 +13,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import javax.sql.DataSource;
-
+//Gopal
 @EnableWebMvc  // Enables Spring MVC features
 @Configuration // Indicates that this class provides Spring configuration
 @ComponentScan(basePackages = "com.jobportal") // Scans for components in the specified package
