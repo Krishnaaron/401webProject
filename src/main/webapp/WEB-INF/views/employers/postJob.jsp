@@ -7,25 +7,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bulk Changes</title>
     <!-- Bootstrap CSS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/@mdi/font/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.6/css/dataTables.bootstrap5.css">
+    <script src="https://cdn.datatables.net/2.1.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/2.1.6/js/dataTables.bootstrap5.min.js"></script>
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/admin.css">
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/css/jobpost.css">
     </head>
 <body id="body-pd">
-    <%
-        response.setHeader("Cache-Control","no-cache,no-store,must-revalidate"); // HTTP 1.1
-        response.setHeader("Pragma","no-cache"); // HTTP 1.0
-        response.setHeader("Expires","0"); // Proxies
-        
-        if(session.getAttribute("employers")==null){
-            response.sendRedirect("index.jsp");
-        }
-    %>
+    
 
     <header class="header" id="header">
         <div class="header_toggle">
@@ -51,11 +44,11 @@
                     <img src="${pageContext.request.contextPath}/assets/images/head.2.png" alt="">
                 </a>
                 <div class="nav_list">
-                    <a href="employercard" class="nav_link">
+                    <a href="employercard.htm" class="nav_link">
                         <i class='bx bx-grid-alt nav_icon'></i>
                         <span class="nav_name">Dashboard</span>
                     </a>
-                    <a href="postjob" class="nav_link active">
+                    <a href="postjob.htm" class="nav_link active">
                         <i class='fas fa-briefcase fa-2x nav_icon'></i>
                         <span class="nav_name">Bulk Upload</span>
                     </a>
@@ -75,7 +68,7 @@
                         <i class='fas fa-key nav_icon' title="Reset Password"></i>
                         <span class="nav_name">Reset Password</span>
                     </a>
-                    <a href="employersLogout" class="nav_link" id="logout-lin">
+                    <a href="employersLogout.htm" class="nav_link" id="logout-lin">
                         <i class='bx bx-log-out nav_icon'></i>
                         <span class="nav_name">Sign Out</span>
                     </a>
@@ -84,9 +77,17 @@
         </nav>
     </div>
 
+
+
+  <c:if test="${not empty message}">
+            <div id="flash-message" class="alert alert-info alert-dismissible fade show" role="alert">
+                <c:out value="${message}"/>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </c:if>
     <div class="container">
        
-
+           
         <div class="form-section">
        
             <h4>Bulk Upload</h4>  
@@ -131,7 +132,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" id="messageModalBody">
-                    <!-- Message will be injected here -->
+                   
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -140,63 +141,19 @@
         </div>
     </div>
 
-<div class="p-5">
-        <table id="example" class="table table-striped" style="width:100%">
-            <thead>
-                <tr>
-                    <th>Role</th>
-                    <th>Location</th>
-                    <th>Skill</th>
-                    <th>Job Type</th>
-                    <th>Company Name</th>
-                    <th>Experience Leval</th>
-                    <th>Number of Oppenings</th>
-                    <th>Job Status</th>
-                    <th>Job Categories</th>
-                    
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Data will be dynamically loaded here -->
-            </tbody>
-        </table>
-</div>
-    <!-- JS Scripts -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="${pageContext.request.contextPath}/assets/js/admin.js"></script>
     <script src="${pageContext.request.contextPath}/assets/js/jobpost.js"></script>
- <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.datatables.net/2.1.6/js/dataTables.js"></script>
-    <script src="https://cdn.datatables.net/2.1.6/js/dataTables.bootstrap5.js"></script>
- 
- <script>
- $(document).ready(function () {
-	    $('#example').DataTable({
-	        "processing": true,
-	        "serverSide": true,
-	        "ajax": {
-	            "url": "jobss", // Adjust this URL based on your actual endpoint
-	            "type": "GET",
-	            "dataSrc": "" // If your server response contains the data at the root level
-	        },
-	        "columns": [ // Fixed the syntax error here
-	            { "data": "job_Title" },
-	            { "data": "location" },
-	            { "data": "required_Skills" },
-	            { "data": "job_Type" },
-	            { "data": "company_Name" },
-	            { "data": "experience_Level" },
-	            { "data": "number_Of_Openings" },
-	            { "data": "job_Status" },
-	            { "data": "job_Category" }
-	        ]
-	    });
-	});
-
-    </script>
+     <script>
+     $(document).ready(function() {
+         // Show the alert
+         $('#flash-message').alert();
+          setTimeout(function() {
+             $('#flash-message').alert('close');
+         }, 5000); // 5000 milliseconds = 5 seconds
+     });
+     </script>
 </body>
 </html>

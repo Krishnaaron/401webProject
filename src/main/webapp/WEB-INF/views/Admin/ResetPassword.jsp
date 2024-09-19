@@ -410,19 +410,7 @@
         }
     </style>
 </head>
-<%
 
-   response.setHeader("Cache-Control","no-cache,no-store,must-revalidate");//http 1.1
-   response.setHeader("Pragma","no-cache");//http1.0
-   response.setHeader("Expires","0");// Proxies
-   
-   if(session.getAttribute("admin")==null){
-	   
-	   response.sendRedirect("index.jsp");
-		
-   }
-
-%>
 <body id="body-pd">
     <header class="header" id="header">
         <div class="header_toggle">
@@ -447,27 +435,27 @@
                     <img src="${pageContext.request.contextPath}/assets/images/head.2.png" alt="">
                 </a>
             <div>
-                <a href="cart" class="nav_link ">
+                <a href="cart.htm" class="nav_link ">
                         <i class='bx bx-grid-alt nav_icon'></i>
                         <span class="nav_name">Dashboard</span>
                     </a>
-                    <a href="AdminRetriveData" class="nav_link">
+                    <a href="AdminRetriveData.htm" class="nav_link">
                         <i class='fas fa-users nav_icon'></i>
                         <span class="nav_name">Job Seekers</span>
                     </a>
-                    <a href="AdminEmployerRetriveData" class="nav_link">
+                    <a href="AdminEmployerRetriveData.htm" class="nav_link">
                         <i class='fas fa-user-tie nav_icon'></i>
                         <span class="nav_name">Employers</span>
                     </a>
-                     <a href="AdminJobRetriveData" class="nav_link">
+                     <a href="AdminJobRetriveData.htm" class="nav_link">
                         <i class='fas fa-briefcase nav_icon'></i>
                         <span class="nav_name">Jobs</span>
                     </a>
-                    <a href="AdminProfileView" class="nav_link">
+                    <a href="AdminProfileView.htm" class="nav_link">
                         <i class='bx bx-user nav_icon'></i>
                         <span class="nav_name">My Profile</span>
                     </a>
-                    <a href="adminPasswordController" class="nav_link active">
+                    <a href="adminPasswordController.htm" class="nav_link active">
                         <i class='fas fa-key nav_icon' title="Reset Password"></i>
                         <span class="nav_name">Reset Password</span>
                     </a>

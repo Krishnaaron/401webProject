@@ -36,7 +36,7 @@ public class HomeController
 		return mv;
 	}
 
-	@RequestMapping("/homeJsp")
+	@RequestMapping("/homeJsp.htm")
 	public ModelAndView getJobControlle()
 	{
 

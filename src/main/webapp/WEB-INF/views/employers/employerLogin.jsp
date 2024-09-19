@@ -107,9 +107,9 @@
             Login/Register
           </a>
           <div class="dropdown-menu" aria-labelledby="loginDropdown">
-            <a class="dropdown-item hi" href="employersLogin">Employer</a>
-            <a class="dropdown-item " href="login">Job Seekers</a>
-            <a class="dropdown-item" href="adminlogincontroller">Admin</a>
+            <a class="dropdown-item hi" href="employersLogin.htm">Employer</a>
+            <a class="dropdown-item " href="login.htm">Job Seekers</a>
+            <a class="dropdown-item" href="adminlogincontroller.htm">Admin</a>
           </div>
         </li>
       </ul>
@@ -118,7 +118,7 @@
   <div class="login-container">
     <div class="login-box">
       <h4>Login as Employers</h4>
-        <form id="loginForm" action="employerDash" method="post">
+        <form id="loginForm" action="employerDash.htm" method="post">
         <div class="form-group">
           <label for="email">Email address: <i class="input-icon fas fa-envelope"></i></label>
           <input type="email" class="form-control" id="email" name="email">

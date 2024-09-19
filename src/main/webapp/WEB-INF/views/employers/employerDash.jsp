@@ -22,18 +22,7 @@
    
 </head>
 <body id="body-pd">
-<%
 
-   response.setHeader("Cache-Control","no-cache,no-store,must-revalidate");//http 1.1
-   response.setHeader("Pragma","no-cache");//http1.0
-   response.setHeader("Expires","0");// Proxies
-   
-   if(session.getAttribute("employers")==null){
-	   
-	   response.sendRedirect("index.jsp");
-   }
-
-%>
     <header class="header" id="header">
         <div class="header_toggle">
             <i class='bx bx-menu' id="header-toggle"></i>
@@ -57,11 +46,11 @@
                     <img src="${pageContext.request.contextPath}/assets/images/head.2.png" alt="">
                 </a>
                 <div class="nav_list">
-                    <a href="employercard" class="nav_link active">
+                    <a href="employercard.htm" class="nav_link active">
                         <i class='bx bx-grid-alt nav_icon'></i>
                         <span class="nav_name">Dashboard</span>
                     </a>
-                    <a href="postjob" class="nav_link">
+                    <a href="postjob.htm" class="nav_link">
                         <i class='fas fa-briefcase fa-2x nav_icon'></i>
                         <span class="nav_name">Bulk Upload</span>
                     </a>
@@ -81,7 +70,7 @@
                         <i class='fas fa-key nav_icon' title="Reset Password"></i>
                         <span class="nav_name">Reset Password</span>
                     </a>
-                     <a href="employersLogout" class="nav_link" id="logout-lin">
+                     <a href="employersLogout.htm" class="nav_link" id="logout-lin">
                         <i class='bx bx-log-out nav_icon'></i>
                         <span class="nav_name">Sign Out</span>
                     </a>

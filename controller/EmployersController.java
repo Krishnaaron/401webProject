@@ -29,7 +29,7 @@ public class EmployersController
 	@Autowired
 	private JobsService			jobsService;
 
-	@RequestMapping("/employersLogin")
+	@PostMapping("/employersLogin.htm")
 	public ModelAndView employerLoginController()
 	{
 
@@ -39,7 +39,7 @@ public class EmployersController
 		return mv;
 	}
 
-	@PostMapping("/employerDash")
+	@PostMapping("/employerDash.htm")
 	public String employerDash(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session)
 	{
 
@@ -53,7 +53,7 @@ public class EmployersController
 			{
 				mv.addObject("errorMessage", "Your account has been blocked.");
 				mv.setViewName("card");
-				return "employers/employerDash";
+				return "employers/employerLogin";
 			}
 			else
 			{
@@ -68,7 +68,7 @@ public class EmployersController
 
 	}
 
-	@RequestMapping("/employercard")
+	@RequestMapping("/employercard.htm")
 	public ModelAndView dashCard(HttpSession session, HttpServletRequest request)
 	{
 

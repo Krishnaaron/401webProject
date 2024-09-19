@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
+	<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+	
 <!DOCTYPE html>
 <html lang="en">
 
@@ -53,18 +55,6 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/assets/css/adminDash.css">
 </head>
-<%
-response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");//http 1.1
-response.setHeader("Pragma", "no-cache");//http1.0
-response.setHeader("Expires", "0");// Proxies
-
-if (session.getAttribute("admin") == null) {
-
-	response.sendRedirect("index.jsp");
-
-}
-%>
-
 <body id="body-pd">
 	<header class="header" id="header">
 		<div class="header_toggle">
@@ -91,19 +81,19 @@ if (session.getAttribute("admin") == null) {
 					alt="">
 				</a>
 				<div class="nav_list">
-					<a href="cart" class="nav_link active"> <i
+					<a href="cart.htm" class="nav_link active"> <i
 						class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Dashboard</span>
-					</a> <a href="AdminRetriveData" class="nav_link"> <i
+					</a> <a href="AdminRetriveData.htm" class="nav_link"> <i
 						class='fas fa-users nav_icon'></i> <span class="nav_name">Job
 							Seekers</span>
-					</a> <a href="AdminEmployerRetriveData" class="nav_link"> <i
+					</a> <a href="AdminEmployerRetriveData.htm" class="nav_link"> <i
 						class='fas fa-user-tie nav_icon'></i> <span class="nav_name">Employers</span>
-					</a> <a href="AdminJobRetriveData" class="nav_link"> <i
+					</a> <a href="AdminJobRetriveData.htm" class="nav_link"> <i
 						class='fas fa-briefcase nav_icon'></i> <span class="nav_name">Jobs</span>
-					</a> <a href="AdminProfileView" class="nav_link"> <i
+					</a> <a href="AdminProfileView.htm" class="nav_link"> <i
 						class='bx bx-user nav_icon'></i> <span class="nav_name">My
 							Profile</span>
-					</a> <a href="adminPasswordController" class="nav_link"> <i
+					</a> <a href="adminPasswordController.htm" class="nav_link"> <i
 						class='fas fa-key nav_icon' title="Reset Password"></i> <span
 						class="nav_name">Reset Password</span>
 					</a> <a href="#" class="nav_link" id="logout-link"> <i
@@ -232,7 +222,7 @@ if (session.getAttribute("admin") == null) {
                 <td><div>Cart Type</div></td>
                 <td>
                     <select name="cartType" id="cartType" class="dropdo">
-                        <option value="line">Line</option>
+                        <option value="column">column</option>
                         <option value="bar">Bar</option>
                         <option value="area">Area</option>
                         <option value="pie">Pie</option>
@@ -275,15 +265,7 @@ if (session.getAttribute("admin") == null) {
     </form>  
 </div>
 
-
-	
-	
-			
-			
-			
-			
-			
-			<div id="dataToggle" class="dataToggles">
+<div id="dataToggle" class="dataToggles">
 			
 				<label for="chart">Choose Chart Type : </label><select id="chart"
 					class="box">
@@ -302,6 +284,10 @@ if (session.getAttribute("admin") == null) {
 			<div id="m4"></div>
 		</div>
 	</div>
+	
+	
+	
+	
 <div id="logoutModal" class="modal fade center" tabindex="-1"
 		aria-labelledby="logoutModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
@@ -338,7 +324,9 @@ if (session.getAttribute("admin") == null) {
 		};
         const demoJobCategoriesJson = ${jobJson};
 		const companyJobCategoriesJson = ${jobCompanyJson};
-		
+	   // const chartRetrive =${chartRetrive};
+	   
+	   
 	</script>
 	<script src="${pageContext.request.contextPath}/assets/js/admin.js"></script>
 	<script src="${pageContext.request.contextPath}/assets/js/adminDash.js"></script>

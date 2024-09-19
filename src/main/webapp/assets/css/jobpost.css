@@ -63,4 +63,11 @@
         .download-link:hover {
             text-decoration: underline;
         }
-  
+     #flash-message{
+     z-index: 2;
+     position: absolute;
+     margin-left: 350px;
+     margin-bottom:450px;
+     text-align:center;
+     width: 500px !important;
+     }

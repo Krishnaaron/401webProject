@@ -61,9 +61,9 @@
 					id="loginDropdown" role="button" data-toggle="dropdown"
 					aria-haspopup="true" aria-expanded="false"> Login/Register </a>
 					 <div class="dropdown-menu" aria-labelledby="loginDropdown">
-            <a class="dropdown-item" href="employersLogin">Employer</a>
+            <a class="dropdown-item" href="employersLogin.htm">Employer</a>
             <a class="dropdown-item" href="login">Job Seekers</a>
-            <a class="dropdown-item" href="adminlogincontroller">Admin</a>
+            <a class="dropdown-item" href="adminlogincontroller.htm">Admin</a>
           </div></li>
 			</ul>
 		</div>

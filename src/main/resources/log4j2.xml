@@ -10,7 +10,7 @@
             </PatternLayout>
             <Policies>
                 <TimeBasedTriggeringPolicy interval="2" modulate="true"/>
-                <SizeBasedTriggeringPolicy size="1MB"/>
+                <SizeBasedTriggeringPolicy size="10MB"/>
             </Policies>
             <DefaultRolloverStrategy fileIndex="min" max="3"/>
         </RollingFile>
@@ -26,13 +26,13 @@
     
     <Loggers>
       
-        <Logger name="com.jobportal" level="DEBUG" additivity="false">
+        <Logger name="com.jobportal" level="INFO" additivity="false">
             <AppenderRef ref="LogToConsole"/>
             <AppenderRef ref="RollingFile"/>
         </Logger>
 
        
-        <Root level="DEBUG">
+        <Root level="INFO">
             <AppenderRef ref="LogToConsole"/>
             <AppenderRef ref="RollingFile"/>
         </Root>

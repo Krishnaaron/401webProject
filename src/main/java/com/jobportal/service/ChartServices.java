@@ -4,9 +4,10 @@ import java.util.List;
 
 import com.jobportal.model.Chart;
 
-public interface ChartServices {
-	
-	
+public interface ChartServices
+{
+
 	public void addChart(Chart chart);
-    public Chart retriveChart();
+
+	public List<Chart> retriveChart();
 }

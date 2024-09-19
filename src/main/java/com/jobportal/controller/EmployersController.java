@@ -39,7 +39,7 @@ public class EmployersController
 		return mv;
 	}
 
-	@PostMapping("/employerDash")
+	@PostMapping("/employerDash.htm")
 	public String employerDash(@RequestParam("email") String email, @RequestParam("password") String password, HttpSession session)
 	{
 
@@ -53,12 +53,14 @@ public class EmployersController
 			{
 				mv.addObject("errorMessage", "Your account has been blocked.");
 				mv.setViewName("card");
-				return "employers/employerDash";
+				return "employers/employerLogin";
+
 			}
 			else
 			{
 				session.setAttribute("employers", employers);
-				return "redirect:/employercard";
+				session.setAttribute("userRole", "EMPLOYER");
+				return "redirect:/employercard.htm";
 
 			}
 		}
@@ -68,7 +70,7 @@ public class EmployersController
 
 	}
 
-	@RequestMapping("/employercard")
+	@RequestMapping("/employercard.htm")
 	public ModelAndView dashCard(HttpSession session, HttpServletRequest request)
 	{
 
@@ -142,7 +144,7 @@ public class EmployersController
 
 	}
 
-	@RequestMapping("/postjob")
+	@RequestMapping("/postjob.htm")
 	public ModelAndView postJob()
 	{
 
@@ -152,7 +154,7 @@ public class EmployersController
 
 	}
 
-	@RequestMapping("/employersLogout")
+	@RequestMapping("/employersLogout.htm")
 	public String AdminLogOut(HttpServletRequest request)
 	{
 
@@ -167,7 +169,7 @@ public class EmployersController
 			session.invalidate(); // Invalidate (remove) the entire session
 		}
 
-		return "redirect:/employersLogin";
+		return "redirect:/employersLogin.htm";
 	}
 
 }

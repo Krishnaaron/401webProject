@@ -7,7 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -77,37 +79,42 @@ public class BulkDataController {
 			if (jobUpdateResponse.isStatus()) {
 			    redirectAttributes.addFlashAttribute("message", "File updated successfully!");
 			} else {
-			    redirectAttributes.addFlashAttribute("error", "File update failed.");
+			    redirectAttributes.addFlashAttribute("message", "File update failed.");
 			}
 			session.setAttribute("jobUpdateResponse", jobUpdateResponse);
 			//sendFile(response, jobUpdateResponse.getByteArrayInputStream(), "updatedData.xlsx");
-			return "redirect:/postjob";
+			return "redirect:/postjob.htm";
 
 		} catch (IOException e) {
 			LOGGER.error("File uploading problem", e);
 			redirectAttributes.addFlashAttribute("error", "Failed to upload file.");
-			return "redirect:/postjob"; // Handle the exception by showing an error page
+			return "redirect:/postjob.htm"; // Handle the exception by showing an error page
 		}
 	}
 	@RequestMapping("/updateData")
-    public void updatedData(HttpServletRequest request, HttpServletResponse response,RedirectAttributes redirectAttributes) {
+	public String updateData(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+	    HttpSession session = request.getSession();
+	    Jobs jobs = (Jobs) session.getAttribute("jobUpdateResponse");
 
-		HttpSession session = request.getSession();
-		Jobs jobs = (Jobs) session.getAttribute("jobUpdateResponse");
-		if(jobs != null) {
-			try {
-				sendFile(response, jobs.getByteArrayInputStream(), "updatedData.xlsx");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-			
-		}
-		else
-			redirectAttributes.addFlashAttribute("message", "pleace upload file view the result");
-		
-    
-    }
+	    if (jobs != null) {
+	        try {
+	         
+	            response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+	            response.setHeader("Content-Disposition", "attachment; filename=updatedData.xlsx");
+	            sendFile(response, jobs.getByteArrayInputStream(),"updatedData.xlsx");
+	            return null; 
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	            redirectAttributes.addFlashAttribute("message", "Error while processing the file. Please try again.");
+	            return "redirect:/errorPage";
+	        }
+	    } else {
+	        redirectAttributes.addFlashAttribute("message", "Please upload a file to view the result.");
+	        return "redirect:/postjob.htm"; 
+	    }
+	}
+
+	
 	private void sendFile(HttpServletResponse response, ByteArrayInputStream fileStream, String filename)
 			throws IOException {
 		response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
@@ -123,16 +130,19 @@ public class BulkDataController {
 		}
 	}
 	
-	@GetMapping("/jobss")
-    public ResponseEntity<List<Jobs>> getJobs(HttpSession session) {
-        Employers employers = (Employers) session.getAttribute("employers");
-        if (employers == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // Or redirect if required
-        }
-        
-        int id = employers.getId();
-        List<Jobs> jobs = jobsService.viewEmployerJobs(id);
+	@GetMapping("/viewJobss")
+	public String viewJobs(HttpSession session, Model model) {
+	    Employers employers = (Employers) session.getAttribute("employers");
+	    if (employers == null) {
+	        return "redirect:index.jsp";
+	    }
+	    
+	    int id = employers.getId();
+	    List<Jobs> jobs = jobsService.viewEmployerJobs(id);
+	    
+	    model.addAttribute("jobs", jobs);
+	    return "redirect:/postjob.htm";
+	}
 
-        return ResponseEntity.ok(jobs);
-    }
+
 }

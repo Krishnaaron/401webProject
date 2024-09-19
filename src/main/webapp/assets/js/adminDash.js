@@ -188,8 +188,8 @@ document.addEventListener('DOMContentLoaded', function() {
 document.addEventListener('DOMContentLoaded', function() {
     // Define the sample JSON for job categories
     let companyCategoriesJson = companyJobCategoriesJson;
-       
-
+      
+    
     const categoryDropdown = document.getElementById('Categories');
     const industryDropdown = document.getElementById('Industries');
 
@@ -223,11 +223,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // Function to initialize charts
-   function initializeCharts(type, is3D, selectedCategory, selectedIndustry, companyCategoriesJson, title, alpha, beta, depth, enabled) {
+   function initializeCharts(type, is3d, selectedCategory, selectedIndustry, companyCategoriesJson, title, alpha, beta, depth, enabled) {
         let chartData = [];
-
+           
         if (selectedCategory && selectedIndustry) {
-            // Get data for the selected category and industry
             const roles = Object.keys(companyCategoriesJson[selectedCategory][selectedIndustry]);
             const openings = Object.values(companyCategoriesJson[selectedCategory][selectedIndustry]);
             chartData = roles.map((role, index) => [role, openings[index]]);
@@ -240,16 +239,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             });
         }
-
-        // Render the chart
+		
+       
         Highcharts.chart('m4', {
             chart: {
                 type: type,
                 options3d: {
-                    enabled: is3D,
+					
+					
+                    enabled:is3d,
                     alpha: alpha,
                     beta: beta,
-                    depth: depth
+                    depth: depth,
+					
                 }
             },
             credits: {
@@ -286,29 +288,33 @@ document.addEventListener('DOMContentLoaded', function() {
     const is3D = document.getElementById('3Dview').checked;
     const selectedCategory = document.getElementById('Categories').value;
     const selectedIndustry = document.getElementById('Industries').value;
-
+	function toBoolean(str) {
+	       return str === 'true';
+	   }
     $.ajax({
-        url: "chartData", // Ensure this matches the @PostMapping URL
+        url: "chartData",
         type: "POST",
-        contentType: "application/json", // Ensure JSON content type
+        contentType: "application/json",
         data: JSON.stringify({
             chartType: type,
             industries: selectedIndustry,
             categories: selectedCategory,
-            is3D: is3D
+            is3D:  is3D 
         }),
         success: function(chartData) {
           
             const type = chartData.type;
-            const is3D = chartData.is3D;
+            const is3D = toBoolean(chartData.is3D);
             const alpha = chartData.alpha;
             const beta = chartData.beta;
             const depth = chartData.depth;
-            const enabled = chartData.enabled;
-              alert(enabled);
+            const enabled = toBoolean(chartData.enabled);
+             
             const title = chartData.title;
             const dataToggleBox = document.getElementById('dataToggleBoxss');
-           initializeCharts(type, is3D, selectedCategory, selectedIndustry, companyCategoriesJson, title, alpha, beta, depth, enabled);
+			
+           initializeCharts(type,is3D, selectedCategory, selectedIndustry, companyCategoriesJson, title, alpha, beta, depth, enabled);
+		  
               dataToggleBox.style.display = 'none';
         },
         error: function(xhr, status, error) {
@@ -342,13 +348,13 @@ document.getElementById('filters').addEventListener('click', function() {
     if (chart) {
         chart.exportChart();
     } else {
-        console.error('Chart not found or no chart with id "m2"');
+        console.error('Chart not found or no chart with id "m4"');
     }
 });
 
-	
+ 
 
-			 initializeCharts('column', false, null, null, companyCategoriesJson, 'Job Openings Overview', 0, 0, 0, 'false');
-    // Initialize chart with aggregated data for all industries and categories
+			 initializeCharts('column', false, null, null, companyCategoriesJson, 'Job Openings', 0, 0, 0, 'false');
+    
    
 });

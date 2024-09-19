@@ -47,18 +47,6 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/assets/css/adminDash.css">
 </head>
-<%
-response.setHeader("Cache-Control", "no-cache,no-store,must-revalidate");//http 1.1
-response.setHeader("Pragma", "no-cache");//http1.0
-response.setHeader("Expires", "0");// Proxies
-
-if (session.getAttribute("admin") == null) {
-
-	response.sendRedirect("index.jsp");
-
-}
-%>
-
 <body id="body-pd">
 	<header class="header" id="header">
 		<div class="header_toggle">

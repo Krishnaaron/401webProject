@@ -18,7 +18,7 @@ public class ChartServicesImp implements ChartServices{
 	}
 
 	@Override
-	public Chart retriveChart() {
+	public List<Chart> retriveChart() {
 		// TODO Auto-generated method stub
 		return chartMapper.retriveChart();
 	}

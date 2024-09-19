@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,54 +21,39 @@ import com.jobportal.service.AdminService;
 import com.jobportal.service.ChartServices;
 
 @RestController
-public class ChartController {
-    @Autowired
-    ChartServices chartServices;
-    
-    @Autowired 
-    AdminService adminService;
+public class ChartController
+{
+	@Autowired
+	ChartServices				chartServices;
 
-    @PostMapping("/saveChart")  // Save chart configuration
-    public void saveChart(@RequestBody Chart chart) {
-        chartServices.addChart(chart);
-    }
-    
-    @PostMapping("/chartData")  // New endpoint for chart data
-    public ResponseEntity<ChartData> getChartData(@RequestBody Chart charts) {
-        List<Jobs> jobsList = adminService.viewJobs();
-        chartServices.addChart(charts);
-        // Create ChartData object
-        ChartData chartData = new ChartData();
-        Chart chart = chartServices.retriveChart();
+	@Autowired
+	AdminService				adminService;
 
-        // Set chart configuration
-        chartData.setType(chart.getChartType());
-        chartData.setIs3D(chart.getIs3D());
-        chartData.setAlpha(10);  // Customize as needed
-        chartData.setBeta(25);
-        chartData.setDepth(250);
-        chartData.setEnabled("true");  // Customize if necessary
-        chartData.setTitle("Job Openings");
+	private static final Logger	LOGGER	= LogManager.getLogger(ChartController.class);
 
-        // Aggregate the job openings data
-        Map<String, Map<String, Map<String, Integer>>> aggregate = jobsList.stream()
-            .filter(job -> job.getJob_category() != null && job.getCompany_Name() != null)
-            .collect(Collectors.groupingBy(
-                Jobs::getJob_category,
-                Collectors.groupingBy(
-                    Jobs::getCompany_Name,
-                    Collectors.toMap(
-                        Jobs::getJob_Title,
-                        Jobs::getNumber_Of_Openings,
-                        Integer::sum
-                    )
-                )
-            ));
+	@PostMapping("/chartData")
+	public ResponseEntity<ChartData> getChartData(@RequestBody Chart charts)
+	{
+		LOGGER.traceEntry("initialize chart Data controller in ajax");
+		List<Jobs> jobsList = adminService.viewJobs();
+		chartServices.addChart(charts);
+		if (jobsList.isEmpty())
+		{
 
-        // Set the job openings data in chartData
-        chartData.setJobOpenings(aggregate);
-
-        // Return the chart data as JSON
-        return new ResponseEntity<>(chartData, HttpStatus.OK);
-    }
+			LOGGER.warn("No Job Found On Data Base");
+		}
+		ChartData chartData = new ChartData();
+		chartData.setType(charts.getChartType());
+		chartData.setIs3D(charts.getIs3D());
+		chartData.setAlpha(10);
+		chartData.setBeta(25);
+		chartData.setDepth(250);
+		chartData.setEnabled("true");
+		chartData.setTitle("Job Openings");
+		Map<String, Map<String, Map<String, Integer>>> aggregate = jobsList.stream().filter(job -> job.getJob_category() != null && job.getCompany_Name() != null)
+				.collect(Collectors.groupingBy(Jobs::getJob_category,
+						Collectors.groupingBy(Jobs::getCompany_Name, Collectors.toMap(Jobs::getJob_Title, Jobs::getNumber_Of_Openings, Integer::sum))));
+		chartData.setJobOpenings(aggregate);
+		return new ResponseEntity<>(chartData, HttpStatus.OK);
+	}
 }

@@ -40,18 +40,7 @@
     </style>
 </head>
 <body>
-<%
 
-   response.setHeader("Cache-Control","no-cache,no-store,must-revalidate");//http 1.1
-   response.setHeader("Pragma","no-cache");//http1.0
-   response.setHeader("Expires","0");// Proxies
-   
-   if(session.getAttribute("admin")==null){
-	   
-		request.getRequestDispatcher("/views/Admin/AdminLogin.jsp").forward(request, response);
-   }
-
-%>
 
     <div class="card">
         <i class="fas fa-user-shield animated-icon"></i> <!-- Admin icon with animation -->

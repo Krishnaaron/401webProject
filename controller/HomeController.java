@@ -35,8 +35,14 @@ public class HomeController {
 		mv.setViewName("home/job");
 		return mv;
 	}
-
-	@RequestMapping("/homeJsp")
+	  @PostMapping("/homeJsp.htm")
+	    public ModelAndView postJobController() {
+	        ModelAndView mv = new ModelAndView();
+	        mv.setViewName("home/welcomepage");
+	        return mv;
+	    }
+	  
+	@PostMapping("/homeJsp.htm")
 	public ModelAndView getJobControlle() {
 
 		ModelAndView mv = new ModelAndView();

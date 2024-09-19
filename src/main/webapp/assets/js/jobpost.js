@@ -68,12 +68,5 @@ document.addEventListener('DOMContentLoaded', function() {
 		           }, 3000);
 		       }
 
-		      
-		       var message = '${message}';
-		       var messageType = '${messageType}'; 
-
-		       if (message) {
-		           showToast(message, messageType);
-		       }
-		 	   
+			
 	   

@@ -4,104 +4,130 @@ import java.util.List;
 
 public class ChartVal
 {
-	 private String chartType;
-	    private String title;
-	    private String filterCondition;
-	    private int filterValue;
-	    private String yAxisTitle;
-	    private String xAxisTitle;
-	    private List<Integer> xCategory;
-        private String idustries;
-        private String categories;
-	    public String getIdustries() {
-			return idustries;
-		}
+	private String			chartType;
 
-		public void setIdustries(String idustries) {
-			this.idustries = idustries;
-		}
+	private String			title;
 
-		public String getCategories() {
-			return categories;
-		}
+	private String			filterCondition;
 
-		public void setCategories(String categories) {
-			this.categories = categories;
-		}
+	private int				filterValue;
 
-		// Constructor
-	    public ChartVal(String chartType, String title, String filterCondition, int filterValue, 
-	                       String yAxisTitle, String xAxisTitle, List<Integer> xCategory) {
-	        this.chartType = chartType;
-	        this.title = title;
-	        this.filterCondition = filterCondition;
-	        this.filterValue = filterValue;
-	        this.yAxisTitle = yAxisTitle;
-	        this.xAxisTitle = xAxisTitle;
-	        this.xCategory = xCategory;
-	    }
+	private String			yAxisTitle;
 
-	    // Default constructor
-	    public ChartVal() {
-	    }
+	private String			xAxisTitle;
 
-	    // Getters and setters
-	    public String getChartType() {
-	        return chartType;
-	    }
+	private List<Integer>	xCategory;
 
-	    public void setChartType(String chartType) {
-	        this.chartType = chartType;
-	    }
+	private String			idustries;
 
-	    public String getTitle() {
-	        return title;
-	    }
+	private String			categories;
 
-	    public void setTitle(String title) {
-	        this.title = title;
-	    }
+	public String getIdustries()
+	{
+		return idustries;
+	}
 
-	    public String getFilterCondition() {
-	        return filterCondition;
-	    }
+	public void setIdustries(String idustries)
+	{
+		this.idustries = idustries;
+	}
 
-	    public void setFilterCondition(String filterCondition) {
-	        this.filterCondition = filterCondition;
-	    }
+	public String getCategories()
+	{
+		return categories;
+	}
 
-	    public int getFilterValue() {
-	        return filterValue;
-	    }
+	public void setCategories(String categories)
+	{
+		this.categories = categories;
+	}
 
-	    public void setFilterValue(int filterValue) {
-	        this.filterValue = filterValue;
-	    }
+	// Constructor
+	public ChartVal(String chartType, String title, String filterCondition, int filterValue, String yAxisTitle, String xAxisTitle, List<Integer> xCategory)
+	{
+		this.chartType = chartType;
+		this.title = title;
+		this.filterCondition = filterCondition;
+		this.filterValue = filterValue;
+		this.yAxisTitle = yAxisTitle;
+		this.xAxisTitle = xAxisTitle;
+		this.xCategory = xCategory;
+	}
 
-	    public String getyAxisTitle() {
-	        return yAxisTitle;
-	    }
+	// Default constructor
+	public ChartVal()
+	{
+	}
 
-	    public void setyAxisTitle(String yAxisTitle) {
-	        this.yAxisTitle = yAxisTitle;
-	    }
+	// Getters and setters
+	public String getChartType()
+	{
+		return chartType;
+	}
 
-	    public String getxAxisTitle() {
-	        return xAxisTitle;
-	    }
+	public void setChartType(String chartType)
+	{
+		this.chartType = chartType;
+	}
 
-	    public void setxAxisTitle(String xAxisTitle) {
-	        this.xAxisTitle = xAxisTitle;
-	    }
+	public String getTitle()
+	{
+		return title;
+	}
 
-	    public List<Integer> getxCategory() {
-	        return xCategory;
-	    }
+	public void setTitle(String title)
+	{
+		this.title = title;
+	}
 
-	    public void setxCategory(List<Integer> xCategory) {
-	        this.xCategory = xCategory;
-	    }
-	    
-	    
-	    
+	public String getFilterCondition()
+	{
+		return filterCondition;
+	}
+
+	public void setFilterCondition(String filterCondition)
+	{
+		this.filterCondition = filterCondition;
+	}
+
+	public int getFilterValue()
+	{
+		return filterValue;
+	}
+
+	public void setFilterValue(int filterValue)
+	{
+		this.filterValue = filterValue;
+	}
+
+	public String getyAxisTitle()
+	{
+		return yAxisTitle;
+	}
+
+	public void setyAxisTitle(String yAxisTitle)
+	{
+		this.yAxisTitle = yAxisTitle;
+	}
+
+	public String getxAxisTitle()
+	{
+		return xAxisTitle;
+	}
+
+	public void setxAxisTitle(String xAxisTitle)
+	{
+		this.xAxisTitle = xAxisTitle;
+	}
+
+	public List<Integer> getxCategory()
+	{
+		return xCategory;
+	}
+
+	public void setxCategory(List<Integer> xCategory)
+	{
+		this.xCategory = xCategory;
+	}
+
 }

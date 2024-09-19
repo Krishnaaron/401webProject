@@ -51,7 +51,7 @@
 		<div class="collapse navbar-collapse justify-content-center"
 			id="navbarNav">
 			<ul class="h6 navbar-nav">
-				<li class="nav-item"><a class="nav-link hi" href="homeJsp">Home <span
+				<li class="nav-item"><a class="nav-link hi" href="homeJsp.htm">Home <span
 						class="sr-only">(current)</span></a></li>
 				<li class="nav-item"><a class="nav-link" href="jobController">Jobs</a>
 				</li>

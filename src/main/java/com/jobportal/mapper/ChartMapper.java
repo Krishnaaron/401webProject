@@ -1,5 +1,6 @@
 package com.jobportal.mapper;
 
+
 import java.util.List;
 
 import org.apache.ibatis.annotations.Insert;
@@ -17,5 +18,5 @@ public interface ChartMapper {
 
     
     @Select("select * from chart")
-    Chart retriveChart();
+    List<Chart> retriveChart();
 }

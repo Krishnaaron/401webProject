@@ -38,7 +38,7 @@ public class AdminController
 	 */
 	private static final Logger	LOGGER	= LogManager.getLogger(AdminController.class);
 
-	@RequestMapping("/adminlogincontroller")
+	@RequestMapping("/adminlogincontroller.htm")
 	public ModelAndView getAdminLogin()
 	{
 		LOGGER.info("Entering getAdminLogin method");
